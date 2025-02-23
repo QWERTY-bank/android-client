@@ -20,4 +20,10 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "qwerty-bank"
-include ':app'
+include ':bank'
+include ':feature-account-auth-api'
+include ':feature-account-auth-impl'
+include ':feature-account-auth-ui'
+include ':common-di'
+include ':common-network'
+include ':common-database'

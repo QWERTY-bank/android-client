@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="snackbar_label">Проверьте корретность введеных данных</string>
+    <string name="account_button_label">Войти</string>
+    <string name="forgot_password_label">Забыли пароль?</string>
+    <string name="account_app_bar_label">Добро пожаловать! Войдите чтобы продолжить</string>
+    <string name="password">Пароль</string>
+    <string name="phone">Телефон</string>
+</resources>

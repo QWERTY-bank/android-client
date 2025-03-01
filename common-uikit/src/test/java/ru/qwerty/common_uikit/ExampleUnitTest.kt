@@ -1,4 +1,4 @@
-package ru.qwerty.feature_account_auth_ui
+package ru.qwerty.common_uikit
 
 import org.junit.Test
 

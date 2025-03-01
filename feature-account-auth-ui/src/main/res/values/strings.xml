@@ -1,0 +1,8 @@
+<resources>
+    <string name="snackbar_label">Check the accuracy of the entered data</string>
+    <string name="account_button_label">Sign in</string>
+    <string name="forgot_password_label">Forgot your password?</string>
+    <string name="account_app_bar_label">Welcome back! Sign in to continue</string>
+    <string name="password">Password</string>
+    <string name="phone">Phone</string>
+</resources>

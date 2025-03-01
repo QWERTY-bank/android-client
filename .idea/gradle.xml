@@ -12,12 +12,14 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/bank" />
             <option value="$PROJECT_DIR$/common-database" />
+            <option value="$PROJECT_DIR$/common-mvvm" />
             <option value="$PROJECT_DIR$/common-network" />
             <option value="$PROJECT_DIR$/feature-account-auth-api" />
             <option value="$PROJECT_DIR$/feature-account-auth-impl" />
             <option value="$PROJECT_DIR$/feature-account-auth-ui" />
           </set>
         </option>
+        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>

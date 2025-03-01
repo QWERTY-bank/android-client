@@ -15,6 +15,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        buildConfigField("String", "BASE_ACCOUNT_URL", "\"http://89.104.67.17:5003/\"")
     }
 
     buildTypes {
@@ -30,11 +32,14 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
     api(libs.retrofit)
-
+    implementation(libs.securityCrypto)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.material)

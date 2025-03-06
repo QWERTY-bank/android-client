@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
  */
 open class MvvmViewModel<State : MvvmState>(initialState: State) : ViewModel() {
 
-    val internalState: MutableStateFlow<State> = MutableStateFlow(initialState)
+    open val internalState: MutableStateFlow<State> = MutableStateFlow(initialState)
 }
 
 interface MvvmState

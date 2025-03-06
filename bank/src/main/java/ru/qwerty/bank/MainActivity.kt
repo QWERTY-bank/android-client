@@ -4,25 +4,27 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavGraph
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.example.feature.account.ui.presentation.ui.navigation.buildAccountListsGraph
+import com.example.feature.account.ui.presentation.ui.navigation.navigateBackToAccountList
+import com.example.feature.account.ui.presentation.ui.navigation.navigateToAccountDetails
+import com.example.feature.account.ui.presentation.ui.navigation.navigateToDeposit
+import com.example.feature.account.ui.presentation.ui.navigation.navigateToWithdraw
 import dagger.hilt.android.AndroidEntryPoint
-import jakarta.inject.Inject
 import ru.qwerty.bank.ui.theme.QwertybankTheme
-import ru.qwerty.feature_account_auth_api.GetCatUseCase
 import ru.qwerty.ui.navigation.AccountRoutes
 import ru.qwerty.ui.navigation.buildAccountGraph
+import ru.qwerty.ui.navigation.navigateToAccountList
+import ru.qwerty.ui.navigation.navigateToLogin
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -30,6 +32,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        WindowCompat.getInsetsController(window, window.decorView)
+            .isAppearanceLightStatusBars = true
         setContent {
             QwertybankTheme {
                 ComposeNavGraph()
@@ -41,10 +45,48 @@ class MainActivity : ComponentActivity() {
 @Composable
 internal fun ComposeNavGraph(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = AccountRoutes.Account.route,
+    Scaffold(
+        modifier = modifier
+            .navigationBarsPadding()
+            .statusBarsPadding(),
     ) {
-        buildAccountGraph()
+        NavHost(
+            modifier = modifier.padding(it),
+            navController = navController,
+            startDestination = AccountRoutes.SplashScreen.route,
+        ) {
+            buildAccountGraph(
+                onNavigateToAccountList = { navController.navigateToAccountList() },
+                onNavigateToLogin = { navController.navigateToLogin() }
+            )
+            buildAccountListsGraph(
+                navigateToWithdraw = { id, currentBalance ->
+                    navController.navigateToWithdraw(
+                        id = id,
+                        currentBalance = currentBalance
+                    )
+                },
+                onNavigateToDetails = { id,
+                                        title,
+                                        isClosed,
+                                        moneyAmount,
+                                        color ->
+                    navController.navigateToAccountDetails(
+                        id = id,
+                        title = title,
+                        isClosed = isClosed,
+                        moneyAmount = moneyAmount,
+                        color = color
+                    )
+                },
+                onNavigateBackToDetails = { navController.popBackStack() },
+                onNavigateBackToAccountList = {
+                    navController.navigateBackToAccountList(
+                        graphId = navController.graph.id,
+                    )
+                },
+                onNavigateToDeposit = { accountId -> navController.navigateToDeposit(accountId) }
+            )
+        }
     }
 }

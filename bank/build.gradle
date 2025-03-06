@@ -55,7 +55,9 @@ dependencies {
     implementation(libs.daggerHilt)
 
     implementation(platform(libs.androidx.compose.bom))
-
+    implementation project(':source:account:feature-account-api')
+    implementation project(':source:account:feature-account-impl')
+    implementation project(':source:account:feature-account-ui')
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.espresso.core)

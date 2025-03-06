@@ -8,7 +8,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,6 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ru.qwerty.common_uikit.component.theme.Colors
 import ru.qwerty.common_uikit.component.theme.TextStyle.MediumFontStyle
 import ru.qwerty.feature_account_auth_ui.R
+import ru.qwerty.ui.viewmodel.AccountNews
 import ru.qwerty.ui.viewmodel.AccountViewModel
 
 /**
@@ -31,14 +31,19 @@ import ru.qwerty.ui.viewmodel.AccountViewModel
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun AccountScreen(viewModel: AccountViewModel) {
+internal fun UserLoginScreen(viewModel: AccountViewModel, navigateOnAccountList: () -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
     LaunchedEffect(Unit) {
-        viewModel.news.collect {
-            snackbarHostState
-                .showSnackbar(message = context.getString(R.string.snackbar_label))
+        viewModel.news.collect { news ->
+            when (news) {
+                is AccountNews.AccountNewsSnackbar -> {
+                    snackbarHostState.showSnackbar(message = context.getString(R.string.snackbar_label))
+                }
+
+                is AccountNews.NavigateToAccountListScreenNews -> navigateOnAccountList()
+            }
         }
     }
     Scaffold(
@@ -47,7 +52,7 @@ internal fun AccountScreen(viewModel: AccountViewModel) {
         topBar = {
             TopAppBar(
                 modifier = Modifier.background(Color.White),
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White,),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White),
                 title = {
                     Text(
                         text = stringResource(R.string.account_app_bar_label),

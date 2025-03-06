@@ -11,12 +11,19 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/bank" />
+            <option value="$PROJECT_DIR$/common-coroutines" />
             <option value="$PROJECT_DIR$/common-database" />
             <option value="$PROJECT_DIR$/common-mvvm" />
             <option value="$PROJECT_DIR$/common-network" />
+            <option value="$PROJECT_DIR$/common-uikit" />
             <option value="$PROJECT_DIR$/feature-account-auth-api" />
             <option value="$PROJECT_DIR$/feature-account-auth-impl" />
             <option value="$PROJECT_DIR$/feature-account-auth-ui" />
+            <option value="$PROJECT_DIR$/source" />
+            <option value="$PROJECT_DIR$/source/account" />
+            <option value="$PROJECT_DIR$/source/account/feature-account-api" />
+            <option value="$PROJECT_DIR$/source/account/feature-account-impl" />
+            <option value="$PROJECT_DIR$/source/account/feature-account-ui" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

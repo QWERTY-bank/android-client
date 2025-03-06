@@ -39,7 +39,7 @@ object TextStyle {
         fontWeight = FontWeight.SemiBold,
     )
 
-    fun createMediumFontStyleWithColor(color: Color) : TextStyle {
+    fun createMediumFontStyleWithColor(color: Color): TextStyle {
         return TextStyle(
             fontFamily = FontFamily(
                 Font(R.font.poppins_medium)
@@ -56,4 +56,8 @@ object Colors {
     val Leadbelcher = Color(202, 202, 202)
     val BlueDepression = Color(54, 41, 183)
     val Jet = Color(52, 52, 52)
+    val JetBlack = Color(23, 23, 23)
+    val SunshineSurprise = Color(255, 175, 42)
+    val PeppyPeacock = Color(255, 66, 103)
+    val SpanishGrey = Color(151, 151, 151)
 }

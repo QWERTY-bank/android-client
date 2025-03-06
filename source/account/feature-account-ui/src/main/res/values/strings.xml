@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_account">Add account</string>
+    <string name="no_account">You havent opened any accounts yet, lets do it together</string>
+    <string name="add_account_name">Enter account name</string>
+    <string name="account_closed">You closed this account</string>
+    <string name="deposit">Deposit</string>
+    <string name="withdraw">Withdraw</string>
+    <string name="close">Close</string>
+    <string name="withdraw_validation">Not enough money on the balance</string>
+</resources>

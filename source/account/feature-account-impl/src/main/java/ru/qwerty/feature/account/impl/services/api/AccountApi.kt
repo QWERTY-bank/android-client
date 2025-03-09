@@ -22,5 +22,5 @@ internal class MoneyAmountApi(
     @SerialName("code")
     val code: String,
     @SerialName("value")
-    val value: Int?,
+    val value: Double?,
 )

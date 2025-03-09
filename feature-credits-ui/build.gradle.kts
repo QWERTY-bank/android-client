@@ -41,6 +41,7 @@ dependencies {
     implementation(project(":common-mvvm"))
     implementation(project(":common-uikit"))
     implementation(project(":feature-credits-api"))
+    implementation(project(":source:account:feature-account-api"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)

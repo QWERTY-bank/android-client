@@ -37,7 +37,7 @@ internal class AccountsRepositoryImpl @Inject constructor(
         Log.d("AccountsService", "creation success")
     }
 
-    override suspend fun getAccountBalance(accountId: String): Int {
+    override suspend fun getAccountBalance(accountId: String): Double {
         val accountBalance = accountsService
             .getAccountBalance(accountId.toInt())
             .currencyValues
@@ -78,7 +78,7 @@ internal class AccountsRepositoryImpl @Inject constructor(
     private fun createTransaction(withdrawAmount: String, key: String): TransactionApi {
         val transaction = TransactionApi(
             key = key,
-            moneyAmountApis = listOf(MoneyAmountApi(code = "Rub", value = withdrawAmount.toInt()))
+            moneyAmountApis = listOf(MoneyAmountApi(code = "Rub", value = withdrawAmount.toDouble()))
         )
         return transaction
     }

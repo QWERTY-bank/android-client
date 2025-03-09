@@ -81,7 +81,8 @@ internal class AccountListViewModel @Inject constructor(
                 }
             }.onSuccess {
                 internalState.setLoadingState(isLoading = false)
-            }.onFailure {
+            }.onFailure { error ->
+                Log.d("AccountListViewModel", "error", error)
                 internalState.update { state ->
                     state.copy(isError = true)
                 }

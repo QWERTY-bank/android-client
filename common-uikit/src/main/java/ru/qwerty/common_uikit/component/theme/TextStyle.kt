@@ -57,6 +57,7 @@ object Colors {
     val BlueDepression = Color(54, 41, 183)
     val Jet = Color(52, 52, 52)
     val JetBlack = Color(23, 23, 23)
+    val Peppy = Color(3, 158, 17, 255)
     val SunshineSurprise = Color(255, 175, 42)
     val PeppyPeacock = Color(255, 66, 103)
     val SpanishGrey = Color(151, 151, 151)

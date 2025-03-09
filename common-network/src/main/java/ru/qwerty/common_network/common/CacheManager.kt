@@ -24,7 +24,6 @@ class RefreshTokenApi(
 @Singleton
 class CacheManager @Inject constructor(@ApplicationContext context: Context) {
 
-
     private companion object {
         private const val TOKEN = "token"
         private const val REFRESH_TOKEN = "refresh_token"
@@ -66,7 +65,12 @@ class CacheManager @Inject constructor(@ApplicationContext context: Context) {
     }
 
     private fun saveAccessTokenExpiredAt(expiredAt: String) {
-        encryptedSharedPreferences.edit(commit = true) { putString(ACCESS_TOKEN_EXPIRED_AT, expiredAt).apply() }
+        encryptedSharedPreferences.edit(commit = true) {
+            putString(
+                ACCESS_TOKEN_EXPIRED_AT,
+                expiredAt
+            ).apply()
+        }
     }
 
     fun getAccessTokenExpiredAt(): String? {
@@ -74,7 +78,12 @@ class CacheManager @Inject constructor(@ApplicationContext context: Context) {
     }
 
     private fun saveRefreshTokenExpiredAt(expiredAt: String) {
-        encryptedSharedPreferences.edit(commit = true) { putString(REFRESH_TOKEN_EXPIRED_AT, expiredAt)}
+        encryptedSharedPreferences.edit(commit = true) {
+            putString(
+                REFRESH_TOKEN_EXPIRED_AT,
+                expiredAt
+            )
+        }
     }
 
     fun getRefreshTokenExpiredAt(): String? {

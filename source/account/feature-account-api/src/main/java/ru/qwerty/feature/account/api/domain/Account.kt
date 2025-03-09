@@ -10,6 +10,6 @@ class Account(
 
 class AccountTransactions(
     val transaction: List<Transaction> = listOf(),
-    val depositCurrencyTotals: Int? = null,
-    val withdrawCurrencyTotals: Int? = null,
+    val depositCurrencyTotals: Double? = null,
+    val withdrawCurrencyTotals: Double? = null,
 )

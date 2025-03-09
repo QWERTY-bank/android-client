@@ -25,7 +25,7 @@ data class AccountBalanceRequest(
 @Serializable
 data class CurrencyValue(
     val code: String,
-    val value: Int,
+    val value: Double,
 )
 
 @Serializable
@@ -39,11 +39,11 @@ internal class TransactionApi(
 @Serializable
 internal class DepositCurrencyTotals(
     val code: String? = null,
-    val value: Int? = null,
+    val value: Double? = null,
 )
 
 @Serializable
 internal class WithdrawCurrencyTotals(
     val code: String? = null,
-    val value: Int? = null,
+    val value: Double? = null,
 )

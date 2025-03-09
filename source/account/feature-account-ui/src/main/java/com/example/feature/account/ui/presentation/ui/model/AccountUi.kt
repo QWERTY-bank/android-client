@@ -20,15 +20,15 @@ data class AccountUi(
 @Immutable
 data class AccountTransactionsUi(
     val transactions: ImmutableList<TransactionUi> = persistentListOf(),
-    val depositCurrencyTotals: Int? = null,
-    val withdrawCurrencyTotals: Int? = null
+    val depositCurrencyTotals: Double? = null,
+    val withdrawCurrencyTotals: Double? = null
 )
 
 @Immutable
 data class TransactionUi(
     val key: String? = null,
     val type: String? = null,
-    val moneyAmount: Int = 0
+    val moneyAmount: Double = 0.0
 )
 
 internal fun Account.toUi(): AccountUi {
@@ -53,6 +53,6 @@ internal fun Transaction.toUi(): TransactionUi {
     return TransactionUi(
         key = this.key,
         type = this.type,
-        moneyAmount = this.moneyAmount.value ?: 0
+        moneyAmount = this.moneyAmount.value ?: 0.0
     )
 }

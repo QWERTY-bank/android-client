@@ -7,14 +7,14 @@ import ru.qwerty.feature.account.api.repository.AccountsRepository
  */
 
 interface GetAccountBalanceUseCase {
-    suspend operator fun invoke(accountId: String) : Int
+    suspend operator fun invoke(accountId: String) : Double
 }
 
 internal class GetAccountBalanceUseCaseImpl(
     private val accountsRepository: AccountsRepository,
 ) : GetAccountBalanceUseCase {
 
-    override suspend operator fun invoke(accountId: String): Int {
+    override suspend operator fun invoke(accountId: String): Double {
         return accountsRepository.getAccountBalance(accountId)
     }
 }

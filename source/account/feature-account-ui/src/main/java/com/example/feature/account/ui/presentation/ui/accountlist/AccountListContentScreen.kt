@@ -39,6 +39,7 @@ import ru.qwerty.common_uikit.component.theme.Colors
 import ru.qwerty.common_uikit.component.theme.Colors.BlueDepression
 import ru.qwerty.common_uikit.component.theme.Colors.SunshineSurprise
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AccountListContentScreen(
     state: AccountListState,
@@ -67,8 +68,8 @@ internal fun AccountListContentScreen(
         item { AddAccountButton(showBottomSheet) }
         item {
             AccentButton(
-                text = "Взять деньги",
-                modifier = Modifier.padding(top = 16.dp),
+                text = "Кредиты",
+                modifier = Modifier.padding(top = 8.dp),
                 onClick = onTakeMoneyButtonTap,
             )
         }

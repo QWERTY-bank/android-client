@@ -80,8 +80,8 @@ internal fun WithdrawScreen(
         onNavigateBackClicked = { viewModel.onBackButtonPressed(accountId) },
         onStartTransaction = {
             viewModel.withdrawFromAccount(
-                currentBalance = currentBalance.toInt(),
-                withdrawAmount = state.moneyAmount.toInt(),
+                currentBalance = currentBalance.toDouble(),
+                withdrawAmount = state.moneyAmount.toDouble(),
                 accountId = accountId,
             )
         },

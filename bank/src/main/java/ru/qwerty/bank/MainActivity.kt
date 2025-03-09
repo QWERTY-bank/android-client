@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -21,6 +20,8 @@ import com.example.feature.account.ui.presentation.ui.navigation.navigateToDepos
 import com.example.feature.account.ui.presentation.ui.navigation.navigateToWithdraw
 import dagger.hilt.android.AndroidEntryPoint
 import ru.qwerty.bank.ui.theme.QwertybankTheme
+import ru.qwerty.feature.credits.ui.presentation.navigation.buildCreditsFeatureGraph
+import ru.qwerty.feature.credits.ui.presentation.navigation.navigateToTariffListScreen
 import ru.qwerty.ui.navigation.AccountRoutes
 import ru.qwerty.ui.navigation.buildAccountGraph
 import ru.qwerty.ui.navigation.navigateToAccountList
@@ -55,6 +56,7 @@ internal fun ComposeNavGraph(modifier: Modifier = Modifier) {
             navController = navController,
             startDestination = AccountRoutes.SplashScreen.route,
         ) {
+            buildCreditsFeatureGraph()
             buildAccountGraph(
                 onNavigateToAccountList = { navController.navigateToAccountList() },
                 onNavigateToLogin = { navController.navigateToLogin() }
@@ -85,7 +87,8 @@ internal fun ComposeNavGraph(modifier: Modifier = Modifier) {
                         graphId = navController.graph.id,
                     )
                 },
-                onNavigateToDeposit = { accountId -> navController.navigateToDeposit(accountId) }
+                onNavigateToDeposit = { accountId -> navController.navigateToDeposit(accountId) },
+                onTakeMoneyButtonTap = { navController.navigateToTariffListScreen() }
             )
         }
     }

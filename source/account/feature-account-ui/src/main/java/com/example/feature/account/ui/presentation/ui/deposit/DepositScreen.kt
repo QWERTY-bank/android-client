@@ -169,7 +169,10 @@ private fun DepositContent(
         when {
             state.isLoading -> DepositLoadingScreen()
             state.error -> onError()
-            else -> DepositButton(onStartTransaction, state)
+            else -> DepositButton(
+                onStartTransaction = onStartTransaction,
+                state = state,
+            )
         }
     }
 }
@@ -197,7 +200,7 @@ private fun SuccessDepositScreen(
 ) {
     AnimatedVisibility(true) {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .padding(horizontal = 24.dp, vertical = 64.dp),
             verticalArrangement = Arrangement.Top,
@@ -208,7 +211,7 @@ private fun SuccessDepositScreen(
             )
             Text(
                 text = "Транзакция прошла успешно!",
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 24.dp),
                 style = TextStyle(

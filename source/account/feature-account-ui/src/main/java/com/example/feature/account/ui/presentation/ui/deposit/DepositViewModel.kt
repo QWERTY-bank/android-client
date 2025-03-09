@@ -18,9 +18,12 @@ import kotlinx.coroutines.launch
 import ru.qwerty.coroutines.runCatchingNonCancellation
 import ru.qwerty.feature.account.api.DepositUseCase
 import javax.inject.Inject
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 @Stable
 @HiltViewModel
+@OptIn(ExperimentalUuidApi::class)
 internal class DepositViewModel @Inject constructor(
     private val depositUseCase: DepositUseCase,
     private val sendResultAfterTransactionFacade: SendResultAfterTransactionFacade,
@@ -34,6 +37,8 @@ internal class DepositViewModel @Inject constructor(
     val news: SharedFlow<DepositScreenNews>
         get() = _news.asSharedFlow()
 
+    private val transactionKey by lazy { Uuid.random().toString() }
+
     fun depositOnAccount(depositAmount: Int, accountId: String) {
         viewModelScope.launch {
             runCatchingNonCancellation {
@@ -41,7 +46,11 @@ internal class DepositViewModel @Inject constructor(
                     _news.emit(DepositScreenNews.ValidationError)
                 } else {
                     internalState.update { it.copy(isLoading = true) }
-                    depositUseCase(id = accountId, depositAmount = depositAmount.toString())
+                    depositUseCase(
+                        id = accountId,
+                        depositAmount = depositAmount.toString(),
+                        key = transactionKey,
+                    )
                     setSuccessState()
                 }
             }.onFailure {

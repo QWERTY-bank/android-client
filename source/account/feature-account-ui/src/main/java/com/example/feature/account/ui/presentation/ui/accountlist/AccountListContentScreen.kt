@@ -45,6 +45,7 @@ internal fun AccountListContentScreen(
     modifier: Modifier = Modifier,
     onCreateAccountTap: (String) -> Unit = {},
     onNavigateToAccountDetails: (Int, String, Boolean, String, Color) -> Unit,
+    onTakeMoneyButtonTap: () -> Unit,
 ) {
     val showBottomSheet = remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
@@ -64,6 +65,13 @@ internal fun AccountListContentScreen(
             onNavigateToAccountDetails = onNavigateToAccountDetails
         )
         item { AddAccountButton(showBottomSheet) }
+        item {
+            AccentButton(
+                text = "Взять деньги",
+                modifier = Modifier.padding(top = 16.dp),
+                onClick = onTakeMoneyButtonTap,
+            )
+        }
 
         if (state.accounts.any { it.isClosed }) {
             item {

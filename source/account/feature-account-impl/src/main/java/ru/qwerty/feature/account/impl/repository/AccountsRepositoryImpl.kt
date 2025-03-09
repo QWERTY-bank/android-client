@@ -28,14 +28,8 @@ internal class AccountsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getAccounts(): List<Account> {
-        return try {
-            val accounts = accountsService.getAccounts()
-            Log.d("AccountsService", "Received accounts: $accounts")
-            accounts.map { it.toDomain() }
-        } catch (e: Exception) {
-            Log.e("AccountsService", "Error fetching accounts: ${e.message}", e)
-            throw e
-        }
+        val accounts = accountsService.getAccounts()
+        return accounts.map { it.toDomain() }
     }
 
     override suspend fun createAccount(title: String) {
@@ -57,24 +51,33 @@ internal class AccountsRepositoryImpl @Inject constructor(
         return result.toDomain()
     }
 
-    override suspend fun deposit(id: String, depositAmount: String) {
+    override suspend fun deposit(id: String, depositAmount: String, key: String) {
         return accountsService.deposit(
             id = id.toInt(),
-            transactionRequest = TransactionRequest(createTransaction(depositAmount)),
+            transactionRequest = TransactionRequest(
+                createTransaction(
+                    withdrawAmount = depositAmount,
+                    key = key,
+                )
+            ),
         )
     }
 
-    override suspend fun withdraw(id: String, withdrawAmount: String) {
+    override suspend fun withdraw(id: String, withdrawAmount: String, key: String) {
         return accountsService.withdraw(
             id = id.toInt(),
-            transactionRequest = TransactionRequest(createTransaction(withdrawAmount)),
+            transactionRequest = TransactionRequest(
+                createTransaction(
+                    withdrawAmount = withdrawAmount,
+                    key = key,
+                )
+            ),
         )
     }
 
-    @OptIn(ExperimentalUuidApi::class)
-    private fun createTransaction(withdrawAmount: String): TransactionApi {
+    private fun createTransaction(withdrawAmount: String, key: String): TransactionApi {
         val transaction = TransactionApi(
-            key = Uuid.random().toString(),
+            key = key,
             moneyAmountApis = listOf(MoneyAmountApi(code = "Rub", value = withdrawAmount.toInt()))
         )
         return transaction

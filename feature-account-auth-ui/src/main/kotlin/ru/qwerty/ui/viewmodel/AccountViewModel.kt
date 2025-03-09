@@ -51,17 +51,13 @@ internal class AccountViewModel @Inject constructor(
                         )
                     } else {
                         _news.tryEmit(AccountNews.AccountNewsSnackbar)
+                        internalState.setLoadingState(isLoading = false)
                     }
                 }
             }.onSuccess {
                 _news.tryEmit(AccountNews.NavigateToAccountListScreenNews)
             }.onFailure { error ->
                 internalState.setErrorState()
-                Log.d(
-                    /* tag = */ "AccountViewModel",
-                    /* msg = */"exception during login",
-                    /* tr = */ error,
-                )
             }
         }
     }
@@ -99,11 +95,11 @@ internal class AccountViewModel @Inject constructor(
         }
     }
 
-    private fun MutableStateFlow<AccountState>.setLoadingState() {
+    private fun MutableStateFlow<AccountState>.setLoadingState(isLoading: Boolean = true) {
         this.update { state ->
             state.copy(
                 accountRemoteState = state.accountRemoteState.copy(
-                    isLoading = true,
+                    isLoading = isLoading,
                     error = false
                 )
             )

@@ -1,5 +1,7 @@
 package ru.qwerty.common_network.interceptors
 
+import android.util.Log
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -17,7 +19,7 @@ internal class AuthInterceptor @Inject constructor(
     private val apiService: AccountService,
     private val sessionManager: SessionManager,
 ) : Interceptor {
-
+    
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val accessToken = sessionManager.token
@@ -27,11 +29,16 @@ internal class AuthInterceptor @Inject constructor(
 
             if (refreshToken != null && !sessionManager.isRefreshTokenExpired()) {
                 runBlocking {
-                    val refreshedTokens = apiService.refreshToken(
-                        auth = "Bearer ${sessionManager.token}",
-                        refreshApi = RefreshApi(refresh = refreshToken),
-                    )
-                    sessionManager.updateToken(refreshedTokens)
+                    runCatching {
+                        apiService.refreshToken(
+                            auth = "Bearer ${sessionManager.token}",
+                            refreshApi = RefreshApi(refresh = refreshToken),
+                        )
+                    }.onFailure { error ->
+                        Log.d("AuthInterceptor", "Error during refreshToken request", error)
+                    }.onSuccess { refreshedTokens ->
+                        sessionManager.updateToken(refreshedTokens)
+                    }
                 }
             }
         }

@@ -17,11 +17,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.qwerty.coroutines.runCatchingNonCancellation
 import ru.qwerty.feature.account.api.WithdrawUseCase
-import ru.qwerty.feature.account.api.domain.MoneyAmount
 import javax.inject.Inject
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 @Stable
 @HiltViewModel
+@OptIn(ExperimentalUuidApi::class)
 internal class WithdrawViewModel @Inject constructor(
     private val withdrawUseCase: WithdrawUseCase,
     private val sendResultAfterTransactionFacade: SendResultAfterTransactionFacade,
@@ -35,6 +37,8 @@ internal class WithdrawViewModel @Inject constructor(
     val news: SharedFlow<WithdrawScreenNews>
         get() = _news.asSharedFlow()
 
+    private val transactionKey by lazy { Uuid.random().toString() }
+
     fun withdrawFromAccount(currentBalance: Int, withdrawAmount: Int, accountId: String) {
         viewModelScope.launch {
             runCatchingNonCancellation {
@@ -42,7 +46,11 @@ internal class WithdrawViewModel @Inject constructor(
                     _news.emit(WithdrawScreenNews.ValidationError)
                 } else {
                     internalState.update { it.copy(isLoading = true) }
-                    withdrawUseCase(id = accountId, withdrawAmount = withdrawAmount.toString())
+                    withdrawUseCase(
+                        id = accountId,
+                        withdrawAmount = withdrawAmount.toString(),
+                        key = transactionKey
+                    )
                     setSuccessState()
                 }
             }.onFailure {

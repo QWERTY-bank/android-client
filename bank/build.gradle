@@ -40,9 +40,14 @@ android {
 
 dependencies {
     implementation(project(":common-network"))
+
     implementation(project(":feature-account-auth-api"))
     implementation(project(":feature-account-auth-impl"))
     implementation(project(":feature-account-auth-ui"))
+
+    implementation(project(":feature-credits-api"))
+    implementation(project(":feature-credits-impl"))
+    implementation(project(":feature-credits-ui"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)

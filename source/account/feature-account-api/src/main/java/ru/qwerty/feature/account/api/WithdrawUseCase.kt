@@ -7,15 +7,15 @@ import ru.qwerty.feature.account.api.repository.AccountsRepository
  * @author y.yangel
  */
 interface WithdrawUseCase {
-    suspend operator fun invoke(id: String, withdrawAmount: String)
+    suspend operator fun invoke(id: String, withdrawAmount: String, key: String)
 }
 
 internal class WithdrawUseCaseImpl(
     private val accountsRepository: AccountsRepository,
 ) : WithdrawUseCase {
 
-    override suspend operator fun invoke(id: String, withdrawAmount: String) {
-        return accountsRepository.withdraw(id, withdrawAmount)
+    override suspend operator fun invoke(id: String, withdrawAmount: String, key: String) {
+        return accountsRepository.withdraw(id, withdrawAmount, key)
     }
 }
 

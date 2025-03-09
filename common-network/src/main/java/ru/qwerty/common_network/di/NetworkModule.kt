@@ -61,7 +61,24 @@ internal class NetworkModule {
             .build()
     }
 
+
     @Provides
+    @Singleton
+    @Named("Credit")
+    fun provideCreditRetrofit(authInterceptor: AuthInterceptor): Retrofit {
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_CREDIT_URL)
+            .addConverterFactory(json.asConverterFactory("application/json; charset=utf-8".toMediaType()))
+            .run { client(okHttpClient) }
+            .build()
+    }
+
+    @Provides
+    @Singleton
     internal fun provideAccountService(@Named("Account") retrofit: Retrofit): AccountService {
         return retrofit.create(AccountService::class.java)
     }

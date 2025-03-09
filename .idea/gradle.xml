@@ -19,6 +19,9 @@
             <option value="$PROJECT_DIR$/feature-account-auth-api" />
             <option value="$PROJECT_DIR$/feature-account-auth-impl" />
             <option value="$PROJECT_DIR$/feature-account-auth-ui" />
+            <option value="$PROJECT_DIR$/feature-credits-api" />
+            <option value="$PROJECT_DIR$/feature-credits-impl" />
+            <option value="$PROJECT_DIR$/feature-credits-ui" />
             <option value="$PROJECT_DIR$/source" />
             <option value="$PROJECT_DIR$/source/account" />
             <option value="$PROJECT_DIR$/source/account/feature-account-api" />
@@ -26,7 +29,6 @@
             <option value="$PROJECT_DIR$/source/account/feature-account-ui" />
           </set>
         </option>
-        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>

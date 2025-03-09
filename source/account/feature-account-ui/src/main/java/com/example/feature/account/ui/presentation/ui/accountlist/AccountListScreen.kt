@@ -34,6 +34,7 @@ import ru.qwerty.common_uikit.component.theme.Colors
 internal fun AccountListScreen(
     viewModel: AccountListViewModel,
     onNavigateToAccountDetails: (Int, String, Boolean, String, Color) -> Unit,
+    onTakeMoneyButtonTap: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     AccountListScreenInternal(
@@ -41,6 +42,7 @@ internal fun AccountListScreen(
         onCreateAccountTap = viewModel::createAccounts,
         onNavigateToAccountDetails = onNavigateToAccountDetails,
         onRetryButtonClicked = viewModel::loadAccounts,
+        onTakeMoneyButtonTap = onTakeMoneyButtonTap,
     )
 }
 
@@ -51,6 +53,7 @@ private fun AccountListScreenInternal(
     onCreateAccountTap: (String) -> Unit = {},
     onNavigateToAccountDetails: (Int, String, Boolean, String, Color) -> Unit,
     onRetryButtonClicked: () -> Unit,
+    onTakeMoneyButtonTap: () -> Unit,
 ) {
     when {
         state.isError -> AccountListErrorScreen(onRetryButtonClicked = onRetryButtonClicked)
@@ -60,6 +63,7 @@ private fun AccountListScreenInternal(
             state = state,
             onCreateAccountTap = onCreateAccountTap,
             onNavigateToAccountDetails = onNavigateToAccountDetails,
+            onTakeMoneyButtonTap = onTakeMoneyButtonTap,
         )
 
         state.accounts.isEmpty() -> AccountListEmptyScreen(
@@ -70,9 +74,10 @@ private fun AccountListScreenInternal(
 }
 
 @Composable
+@Preview(showBackground = true)
 fun AccountListErrorScreen(
     modifier: Modifier = Modifier,
-    onRetryButtonClicked: () -> Unit,
+    onRetryButtonClicked: () -> Unit = {},
 ) {
     Column(
         modifier = modifier

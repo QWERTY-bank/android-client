@@ -69,11 +69,13 @@ fun NavGraphBuilder.buildAccountListsGraph(
     onNavigateToDeposit: (String) -> Unit,
     onNavigateBackToAccountList: () -> Unit,
     onNavigateBackToDetails: () -> Unit,
+    onTakeMoneyButtonTap: () -> Unit,
 ) {
     composable(route = AccountListRoutes.AccountListScreen.route) {
         AccountListScreen(
             viewModel = hiltViewModel(),
             onNavigateToAccountDetails = onNavigateToDetails,
+            onTakeMoneyButtonTap = onTakeMoneyButtonTap,
         )
     }
     composable<AccountNavigation> { backStackEntry ->

@@ -46,10 +46,6 @@ internal class AccountListViewModel @Inject constructor(
     val state: StateFlow<AccountListState>
         get() = internalState.asStateFlow()
 
-    private val internalNews: MutableSharedFlow<AccountListNews> = MutableSharedFlow(replay = 1)
-    val news: SharedFlow<AccountListNews>
-        get() = internalNews.asSharedFlow()
-
     init {
         loadAccounts()
         obtainResult()
@@ -74,19 +70,27 @@ internal class AccountListViewModel @Inject constructor(
 
     fun loadAccounts() {
         viewModelScope.launch {
-            internalState.setLoadingState()
-            val accounts = getUserAccountUseCase()
-            internalState.update { state ->
-                state.copy(
-                    accounts = accounts.map { it.toUi() }.toImmutableList(),
-                    isLoading = false,
-                )
+            runCatchingNonCancellation {
+                internalState.setLoadingState()
+                val accounts = getUserAccountUseCase()
+                internalState.update { state ->
+                    state.copy(
+                        accounts = accounts.map { it.toUi() }.toImmutableList(),
+                        isLoading = false,
+                    )
+                }
+            }.onSuccess {
+                internalState.setLoadingState(isLoading = false)
+            }.onFailure {
+                internalState.update { state ->
+                    state.copy(isError = true)
+                }
             }
         }
     }
 
     fun createAccounts(title: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             runCatchingNonCancellation {
                 if (title.isValidForTitle()) {
                     internalState.setLoadingState()
@@ -108,12 +112,12 @@ internal class AccountListViewModel @Inject constructor(
     }
 }
 
-fun String.removeAllSpaces(): String {
+private fun String.removeAllSpaces(): String {
     val withOutSpaces = this.replace("\\s".toRegex(), "")
     return withOutSpaces
 }
 
-fun String.isValidForTitle(): Boolean {
+private fun String.isValidForTitle(): Boolean {
     return this.isNotBlank()
 }
 
@@ -124,8 +128,4 @@ internal data class AccountListState(
     val isError: Boolean = false,
 ) : MvvmState
 
-@Immutable
-internal sealed interface AccountListNews {
-    data class NavigateToAccountDetails(val id: Int) : AccountListNews
-}
 

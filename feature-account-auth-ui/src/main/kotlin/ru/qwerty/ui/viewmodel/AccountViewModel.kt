@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.common_mvvm.MvvmState
 import com.example.common_mvvm.MvvmViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.qwerty.coroutines.runCatchingNonCancellation
+import ru.qwerty.feature_account_auth_api.IsUserAlreadyLoginUseCase
 import ru.qwerty.feature_account_auth_api.accounts.LoginUserByPhoneUseCase
 import ru.qwerty.ui.domain.ValidatePasswordInputUseCase
 import ru.qwerty.ui.domain.ValidatePhoneInputUseCase
@@ -25,7 +27,7 @@ import javax.inject.Inject
  */
 @Stable
 @HiltViewModel
-internal class AccountViewModel @Inject constructor (
+internal class AccountViewModel @Inject constructor(
     private val loginUserByPhoneUseCase: LoginUserByPhoneUseCase,
     private val validatePhoneInputUseCase: ValidatePhoneInputUseCase,
     private val validatePasswordInputUseCase: ValidatePasswordInputUseCase,
@@ -34,7 +36,7 @@ internal class AccountViewModel @Inject constructor (
     val state: StateFlow<AccountState>
         get() = internalState.asStateFlow()
 
-    private val _news = MutableSharedFlow<Unit>(replay = 1)
+    private val _news = MutableSharedFlow<AccountNews>(replay = 1)
     val news = _news.asSharedFlow()
 
     fun loginUserByPhone() {
@@ -48,16 +50,14 @@ internal class AccountViewModel @Inject constructor (
                             password = accountUiState.password,
                         )
                     } else {
-                        _news.tryEmit(Unit)
+                        _news.tryEmit(AccountNews.AccountNewsSnackbar)
+                        internalState.setLoadingState(isLoading = false)
                     }
                 }
+            }.onSuccess {
+                _news.tryEmit(AccountNews.NavigateToAccountListScreenNews)
             }.onFailure { error ->
                 internalState.setErrorState()
-                Log.d(
-                    /* tag = */ "AccountViewModel",
-                    /* msg = */"exception during login",
-                    /* tr = */ error,
-                )
             }
         }
     }
@@ -95,16 +95,21 @@ internal class AccountViewModel @Inject constructor (
         }
     }
 
-    private fun MutableStateFlow<AccountState>.setLoadingState() {
+    private fun MutableStateFlow<AccountState>.setLoadingState(isLoading: Boolean = true) {
         this.update { state ->
             state.copy(
                 accountRemoteState = state.accountRemoteState.copy(
-                    isLoading = true,
+                    isLoading = isLoading,
                     error = false
                 )
             )
         }
     }
+}
+
+internal sealed interface AccountNews {
+    data object AccountNewsSnackbar : AccountNews
+    data object NavigateToAccountListScreenNews : AccountNews
 }
 
 internal data class AccountState(
@@ -120,8 +125,8 @@ internal data class AccountRemoteState(
 internal data class AccountUiState(
     val phone: String = "",
     val password: String = "",
-    val isPhoneValid: ValidationResult = ValidationResult(),
-    val isPasswordValid: ValidationResult = ValidationResult(),
+    val isPhoneValid: ValidationResult = ValidationResult(isValid = false),
+    val isPasswordValid: ValidationResult = ValidationResult(isValid = false),
 )
 
 private fun AccountUiState.isValidationPassed(): Boolean {

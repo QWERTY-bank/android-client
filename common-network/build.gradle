@@ -17,6 +17,8 @@ android {
         consumerProguardFiles "consumer-rules.pro"
 
         buildConfigField("String", "BASE_ACCOUNT_URL", "\"http://89.104.67.17:5003/\"")
+        buildConfigField("String", "BASE_CREDIT_URL", "\"http://89.104.67.17:5002/\"")
+        buildConfigField("String", "BASE_CORE_URL", "\"http://89.104.67.17:5001/\"")
     }
 
     buildTypes {
@@ -41,6 +43,7 @@ dependencies {
     api(libs.retrofit)
     implementation(libs.securityCrypto)
     implementation(libs.androidx.appcompat)
+    implementation(libs.converterGson)
     implementation(libs.androidx.core.ktx)
     implementation(libs.material)
     implementation(libs.daggerHilt)

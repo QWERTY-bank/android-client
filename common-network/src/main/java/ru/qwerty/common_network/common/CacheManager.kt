@@ -5,8 +5,9 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import jakarta.inject.Inject
-import jakarta.inject.Singleton
 import kotlinx.serialization.Serializable
+import androidx.core.content.edit
+import javax.inject.Singleton
 
 
 /**
@@ -20,8 +21,8 @@ class RefreshTokenApi(
     val accessExpiredDateTime: String,
 )
 
+@Singleton
 class CacheManager @Inject constructor(@ApplicationContext context: Context) {
-
 
     private companion object {
         private const val TOKEN = "token"
@@ -35,7 +36,7 @@ class CacheManager @Inject constructor(@ApplicationContext context: Context) {
 
     private val encryptedSharedPreferences =
         EncryptedSharedPreferences.create(
-            context, "my_secret_storage" , masterKey,
+            context, "my_secret_storage", masterKey,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
@@ -48,7 +49,7 @@ class CacheManager @Inject constructor(@ApplicationContext context: Context) {
     }
 
     private fun saveToken(token: String) {
-        encryptedSharedPreferences.edit().putString(TOKEN, token).apply()
+        encryptedSharedPreferences.edit(commit = true) { putString(TOKEN, token) }
     }
 
     fun getToken(): String? {
@@ -56,7 +57,7 @@ class CacheManager @Inject constructor(@ApplicationContext context: Context) {
     }
 
     private fun saveRefreshToken(refreshToken: String) {
-        encryptedSharedPreferences.edit().putString(REFRESH_TOKEN, refreshToken).apply()
+        encryptedSharedPreferences.edit(commit = true) { putString(REFRESH_TOKEN, refreshToken) }
     }
 
     fun getRefreshToken(): String? {
@@ -64,7 +65,12 @@ class CacheManager @Inject constructor(@ApplicationContext context: Context) {
     }
 
     private fun saveAccessTokenExpiredAt(expiredAt: String) {
-        encryptedSharedPreferences.edit().putString(ACCESS_TOKEN_EXPIRED_AT, expiredAt).apply()
+        encryptedSharedPreferences.edit(commit = true) {
+            putString(
+                ACCESS_TOKEN_EXPIRED_AT,
+                expiredAt
+            ).apply()
+        }
     }
 
     fun getAccessTokenExpiredAt(): String? {
@@ -72,7 +78,12 @@ class CacheManager @Inject constructor(@ApplicationContext context: Context) {
     }
 
     private fun saveRefreshTokenExpiredAt(expiredAt: String) {
-        encryptedSharedPreferences.edit().putString(REFRESH_TOKEN_EXPIRED_AT, expiredAt).apply()
+        encryptedSharedPreferences.edit(commit = true) {
+            putString(
+                REFRESH_TOKEN_EXPIRED_AT,
+                expiredAt
+            )
+        }
     }
 
     fun getRefreshTokenExpiredAt(): String? {

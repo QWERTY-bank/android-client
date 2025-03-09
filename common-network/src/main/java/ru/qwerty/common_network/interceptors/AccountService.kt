@@ -2,6 +2,7 @@ package ru.qwerty.common_network.interceptors
 
 import kotlinx.serialization.Serializable
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
 import ru.qwerty.common_network.common.RefreshTokenApi
 
@@ -11,10 +12,13 @@ import ru.qwerty.common_network.common.RefreshTokenApi
 interface AccountService {
 
     @POST("api/auth/login")
-    suspend fun loginByPhoneNumber(@Body loginApi: LoginApi) : RefreshTokenApi
+    suspend fun loginByPhoneNumber(@Body loginApi: LoginApi): RefreshTokenApi
 
     @POST("api/auth/refresh")
-    suspend fun refreshToken(@Body refreshApi: RefreshApi) : RefreshTokenApi
+    suspend fun refreshToken(
+        @Header("Authorization") auth: String,
+        @Body refreshApi: RefreshApi,
+    ): RefreshTokenApi
 
 }
 

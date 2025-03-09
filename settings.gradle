@@ -19,6 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
+
 rootProject.name = "qwerty-bank"
 include ':bank'
 include ':feature-account-auth-api'
@@ -29,3 +30,9 @@ include ':common-database'
 include ':common-mvvm'
 include ':common-coroutines'
 include ':common-uikit'
+include ':source:account:feature-account-impl'
+include ':source:account:feature-account-api'
+include ':source:account:feature-account-ui'
+include ':feature-credits-impl'
+include ':feature-credits-api'
+include ':feature-credits-ui'

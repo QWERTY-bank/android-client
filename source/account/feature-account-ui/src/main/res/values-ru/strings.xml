@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_account">Создать счет</string>
+    <string name="no_account">Вы пока не открыли ни один счет, давайте сделаем это вместе</string>
+    <string name="add_account_name">Введите название счета</string>
+    <string name="account_closed">Вы закрыли этот счет</string>
+    <string name="deposit">Пополнить</string>
+    <string name="withdraw">Снять</string>
+    <string name="close">Закрыть</string>
+    <string name="withdraw_validation">На балансе недостаточно средств</string>
+</resources>

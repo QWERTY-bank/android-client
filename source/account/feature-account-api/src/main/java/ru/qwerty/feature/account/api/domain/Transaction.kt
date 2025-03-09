@@ -6,4 +6,4 @@ class Transaction(
     val moneyAmount: MoneyAmount = MoneyAmount(),
 )
 
-class MoneyAmount(val value: Int? = null)
+class MoneyAmount(val value: Double? = null)

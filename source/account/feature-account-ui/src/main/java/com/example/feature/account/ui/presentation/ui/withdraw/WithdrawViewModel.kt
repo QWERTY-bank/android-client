@@ -39,7 +39,7 @@ internal class WithdrawViewModel @Inject constructor(
 
     private val transactionKey by lazy { Uuid.random().toString() }
 
-    fun withdrawFromAccount(currentBalance: Int, withdrawAmount: Int, accountId: String) {
+    fun withdrawFromAccount(currentBalance: Double, withdrawAmount: Double, accountId: String) {
         viewModelScope.launch {
             runCatchingNonCancellation {
                 if (currentBalance - withdrawAmount < 0) {

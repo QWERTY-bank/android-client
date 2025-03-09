@@ -123,10 +123,10 @@ internal data class AccountRemoteState(
 )
 
 internal data class AccountUiState(
-    val phone: String = "78005553535",
-    val password: String = "3101911Gg",
-    val isPhoneValid: ValidationResult = ValidationResult(isValid = true),
-    val isPasswordValid: ValidationResult = ValidationResult(isValid = true),
+    val phone: String = "",
+    val password: String = "",
+    val isPhoneValid: ValidationResult = ValidationResult(isValid = false),
+    val isPasswordValid: ValidationResult = ValidationResult(isValid = false),
 )
 
 private fun AccountUiState.isValidationPassed(): Boolean {

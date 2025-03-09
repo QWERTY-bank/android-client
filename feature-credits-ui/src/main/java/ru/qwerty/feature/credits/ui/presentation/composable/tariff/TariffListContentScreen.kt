@@ -27,7 +27,7 @@ import ru.qwerty.feature.credits.ui.presentation.composable.tariff.viewmodel.Tar
 internal fun TariffListContentScreen(
     state: TariffListState,
     modifier: Modifier = Modifier,
-    onTariffTap: (String) -> Unit = {},
+    onTariffTap: (String, String, String) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -50,7 +50,13 @@ internal fun TariffListContentScreen(
         }
         items(state.tariffList) { item ->
             TariffCard(
-                modifier = modifier.clickable { onTariffTap(item.id) },
+                modifier = modifier.clickable {
+                    onTariffTap(
+                        item.id,
+                        item.minPeriodDays.toString(),
+                        item.maxPeriodDays.toString(),
+                    )
+                },
                 name = item.name,
                 interestRate = item.interestRate,
                 interestRateType = item.interestRateType.name,

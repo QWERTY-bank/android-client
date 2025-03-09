@@ -10,6 +10,7 @@ import ru.qwerty.feature.credits.api.domain.CreditType
 import ru.qwerty.feature.credits.ui.presentation.composable.tariff.viewmodel.TariffListState
 import ru.qwerty.feature.credits.ui.presentation.composable.tariff.viewmodel.TariffListViewModel
 import ru.qwerty.feature.credits.ui.presentation.composable.tariff.viewmodel.TariffUi
+import ru.qwerty.feature.credits.ui.presentation.navigation.navigateToChooseAccountLambda
 
 /**
  * @author y.yangel
@@ -18,7 +19,7 @@ import ru.qwerty.feature.credits.ui.presentation.composable.tariff.viewmodel.Tar
 internal fun TariffListScreen(
     modifier: Modifier = Modifier,
     viewModel: TariffListViewModel,
-    onTariffTap: (String) -> Unit = {},
+    onTariffTap: (String, String, String) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     TariffListScreenInternal(
@@ -34,13 +35,11 @@ private fun TariffListScreenInternal(
     modifier: Modifier = Modifier,
     state: TariffListState,
     onRetryButton: () -> Unit,
-    onTariffTap: (String) -> Unit = {},
+    onTariffTap: (String, String, String) -> Unit,
 ) {
     when {
         state.isError -> TariffListErrorScreen(modifier = modifier, onRetryClick = onRetryButton)
-
         state.isLoading -> TariffListLoadingScreen(modifier = modifier)
-
         state.tariffList.isNotEmpty() -> TariffListContentScreen(
             modifier = modifier,
             state = state,
@@ -59,6 +58,7 @@ private fun TariffListScreenPreview() {
             tariffList = mockTariffUiList,
         ),
         onRetryButton = {},
+        onTariffTap = navigateToChooseAccountLambda,
     )
 }
 

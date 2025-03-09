@@ -21,6 +21,13 @@ import com.example.feature.account.ui.presentation.ui.navigation.navigateToWithd
 import dagger.hilt.android.AndroidEntryPoint
 import ru.qwerty.bank.ui.theme.QwertybankTheme
 import ru.qwerty.feature.credits.ui.presentation.navigation.buildCreditsFeatureGraph
+import ru.qwerty.feature.credits.ui.presentation.navigation.navigateBackToLoansListScreen
+import ru.qwerty.feature.credits.ui.presentation.navigation.navigateToApplyLoansDirection
+import ru.qwerty.feature.credits.ui.presentation.navigation.navigateToChooseAccountScreen
+import ru.qwerty.feature.credits.ui.presentation.navigation.navigateToDepositForLoanScreen
+import ru.qwerty.feature.credits.ui.presentation.navigation.navigateToLoanDetailsScreen
+import ru.qwerty.feature.credits.ui.presentation.navigation.navigateToLoansListScreen
+import ru.qwerty.feature.credits.ui.presentation.navigation.navigateToLoansReduceChooseAccount
 import ru.qwerty.feature.credits.ui.presentation.navigation.navigateToTariffListScreen
 import ru.qwerty.ui.navigation.AccountRoutes
 import ru.qwerty.ui.navigation.buildAccountGraph
@@ -56,7 +63,40 @@ internal fun ComposeNavGraph(modifier: Modifier = Modifier) {
             navController = navController,
             startDestination = AccountRoutes.SplashScreen.route,
         ) {
-            buildCreditsFeatureGraph()
+            buildCreditsFeatureGraph(
+                onGetLoanClick = { navController.navigateToTariffListScreen() },
+                onTariffTap = { tariffId, minDays, maxDays ->
+                    navController.navigateToApplyLoansDirection(
+                        tariffId = tariffId,
+                        minPeriodDays = minDays,
+                        maxPeriodDays = maxDays,
+                    )
+                },
+                onContinueButtonTap = { amount, daysAmount, tariffId ->
+                    navController.navigateToChooseAccountScreen(
+                        amount = amount,
+                        daysAmount = daysAmount,
+                        tariffId = tariffId,
+                    )
+                },
+                onNavigateBackToLoans = { navController.navigateBackToLoansListScreen(navController.graph.id) },
+                onNavigateBackToAccountList = {
+                    navController.navigateBackToAccountList(
+                        graphId = navController.graph.id,
+                    )
+                },
+                onNavigateToLoanDetails = { loanId ->
+                    navController.navigateToLoanDetailsScreen(loanId)
+                },
+                onAccountTap = { value, accountId, creditId ->
+                    navController.navigateToDepositForLoanScreen(
+                        accountMoneyAmount = value,
+                        accountId = accountId,
+                        creditId = creditId,
+                    )
+                },
+                onPayClick = { loanId -> navController.navigateToLoansReduceChooseAccount(loanId) },
+            )
             buildAccountGraph(
                 onNavigateToAccountList = { navController.navigateToAccountList() },
                 onNavigateToLogin = { navController.navigateToLogin() }
@@ -88,7 +128,7 @@ internal fun ComposeNavGraph(modifier: Modifier = Modifier) {
                     )
                 },
                 onNavigateToDeposit = { accountId -> navController.navigateToDeposit(accountId) },
-                onTakeMoneyButtonTap = { navController.navigateToTariffListScreen() }
+                onTakeMoneyButtonTap = { navController.navigateToLoansListScreen() }
             )
         }
     }

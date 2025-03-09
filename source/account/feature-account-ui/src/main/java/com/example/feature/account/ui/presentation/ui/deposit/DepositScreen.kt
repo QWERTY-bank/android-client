@@ -79,7 +79,7 @@ internal fun DepositScreen(
         onNavigateBackClicked = { viewModel.onBackButtonPressed(accountId) },
         onStartTransaction = {
             viewModel.depositOnAccount(
-                depositAmount = state.moneyAmount.toInt(),
+                depositAmount = state.moneyAmount.toDouble(),
                 accountId = accountId,
             )
         },

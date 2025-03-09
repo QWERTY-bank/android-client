@@ -15,7 +15,7 @@ interface AccountsRepository {
 
     suspend fun createAccount(title: String)
 
-    suspend fun getAccountBalance(accountId: String): Int
+    suspend fun getAccountBalance(accountId: String): Double
 
     suspend fun getTransactions(id: String): AccountTransactions
 

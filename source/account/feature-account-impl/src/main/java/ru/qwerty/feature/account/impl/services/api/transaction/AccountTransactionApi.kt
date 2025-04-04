@@ -7,8 +7,8 @@ import ru.qwerty.feature.account.impl.services.api.MoneyAmountApi
 @Serializable
 internal class AccountTransactionApi(
     val transactions: List<TransactionApi> = listOf(),
-    val depositCurrencyTotals: List<DepositCurrencyTotals> = listOf(),
-    val withdrawCurrencyTotals: List<WithdrawCurrencyTotals> = listOf(),
+    val depositCurrencyTotals: DepositCurrencyTotals,
+    val withdrawCurrencyTotals: WithdrawCurrencyTotals,
 )
 
 @Serializable
@@ -19,7 +19,22 @@ internal class TransactionRequest(
 @Serializable
 data class AccountBalanceRequest(
     val isClosed: Boolean,
-    val currencyValues: List<CurrencyValue>,
+    val currencyValue: CurrencyValue,
+)
+
+
+@Serializable
+internal data class TransactionWebsocketResponse(
+    @SerialName("currencyValue")
+    val accountValue: AccountValue,
+    @SerialName("transaction")
+    val transaction: TransactionApi,
+)
+
+@Serializable
+internal data class AccountValue(
+    val code: String,
+    val value: Double,
 )
 
 @Serializable
@@ -32,8 +47,8 @@ data class CurrencyValue(
 internal class TransactionApi(
     val key: String? = null,
     val type: String? = null,
-    @SerialName("currencyValues")
-    val moneyAmountApis: List<MoneyAmountApi> = listOf(),
+    @SerialName("currencyValue")
+    val moneyAmountApis: MoneyAmountApi,
 )
 
 @Serializable

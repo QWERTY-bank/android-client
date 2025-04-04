@@ -38,13 +38,13 @@ private fun TariffListScreenInternal(
     onTariffTap: (String, String, String) -> Unit,
 ) {
     when {
-        state.isError -> TariffListErrorScreen(modifier = modifier, onRetryClick = onRetryButton)
-        state.isLoading -> TariffListLoadingScreen(modifier = modifier)
         state.tariffList.isNotEmpty() -> TariffListContentScreen(
             modifier = modifier,
             state = state,
             onTariffTap = onTariffTap,
         )
+        state.isError -> TariffListErrorScreen(modifier = modifier, onRetryClick = onRetryButton)
+        state.isLoading -> TariffListLoadingScreen(modifier = modifier)
 
         else -> TariffListLoadingScreen(modifier = modifier)
     }
@@ -66,7 +66,7 @@ private val mockTariffUiList = persistentListOf(
     TariffUi(
         id = "1",
         name = "Basic Plan",
-        interestRate = 5,
+        interestRate = 5.0,
         interestRateType = CreditType.Annual,
         minPeriodDays = 30,
         maxPeriodDays = 365,
@@ -74,7 +74,7 @@ private val mockTariffUiList = persistentListOf(
     TariffUi(
         id = "2",
         name = "Premium Plan",
-        interestRate = 8,
+        interestRate = 8.0,
         interestRateType = CreditType.Monthly,
         minPeriodDays = 60,
         maxPeriodDays = 730,
@@ -82,7 +82,7 @@ private val mockTariffUiList = persistentListOf(
     TariffUi(
         id = "3",
         name = "Flexi Plan",
-        interestRate = 10,
+        interestRate = 10.0,
         interestRateType = CreditType.Daytime,
         minPeriodDays = 90,
         maxPeriodDays = 1095,

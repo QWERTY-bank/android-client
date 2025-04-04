@@ -33,7 +33,7 @@ import ru.qwerty.common_uikit.component.theme.Colors
 fun TariffCard(
     modifier: Modifier = Modifier,
     name: String = "Летний",
-    interestRate: Int = 17,
+    interestRate: Double = 17.0,
     interestRateType: String = "Annual",
     minPeriodDays: String = "1",
     maxPeriodDays: String = "11",

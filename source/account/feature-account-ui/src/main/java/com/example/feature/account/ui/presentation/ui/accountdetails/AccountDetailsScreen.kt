@@ -42,12 +42,12 @@ internal fun AccountDetailsScreen(
     id: Int,
     isClosed: Boolean,
     title: String,
-    moneyAmount: String,
+    accountCurrencyType: String,
     color: Color,
     viewModel: AccountDetailsViewModel,
     modifier: Modifier = Modifier,
-    onClickOnWithdraw: (String, String) -> Unit,
-    onClickOnDeposit: (String) -> Unit,
+    onClickOnWithdraw: (String, String, String) -> Unit,
+    onClickOnDeposit: (String, String) -> Unit,
     onNavigateBackToAccountList: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -74,6 +74,7 @@ internal fun AccountDetailsScreen(
         onClickOnDeposit = onClickOnDeposit,
         onCloseAccountTap = viewModel::closeAccountById,
         accountId = id.toString(),
+        accountCurrencyType = accountCurrencyType,
     )
 }
 
@@ -82,12 +83,13 @@ private fun AccountDetailsScreenInternal(
     state: AccountDetailsState,
     accountId: String,
     moneyAmount: String,
+    accountCurrencyType: String,
     title: String,
     color: Color,
     isClosed: Boolean,
     modifier: Modifier = Modifier,
-    onClickOnWithdraw: (String, String) -> Unit,
-    onClickOnDeposit: (String) -> Unit,
+    onClickOnWithdraw: (String, String, String) -> Unit,
+    onClickOnDeposit: (String, String) -> Unit,
     onCloseAccountTap: (String) -> Unit,
 ) {
     LazyColumn(
@@ -100,6 +102,8 @@ private fun AccountDetailsScreenInternal(
                 balance = moneyAmount,
                 cardTitle = title,
                 baseColor = color,
+                accountCurrencyType = accountCurrencyType,
+                cardNumber = accountId.toInt(),
             )
         }
         item {
@@ -110,7 +114,8 @@ private fun AccountDetailsScreenInternal(
                 onWithdrawTap = onClickOnWithdraw,
                 onCloseAccountTap = onCloseAccountTap,
                 onDepositTap = onClickOnDeposit,
-                accountId = accountId
+                accountId = accountId,
+                accountCurrencyType = accountCurrencyType,
             )
         }
         when {
@@ -140,8 +145,9 @@ private fun AccountDetailsActions(
     modifier: Modifier,
     isClosed: Boolean,
     moneyAmount: String,
-    onDepositTap: (String) -> Unit = {},
-    onWithdrawTap: (String, String) -> Unit,
+    accountCurrencyType: String,
+    onDepositTap: (String, String) -> Unit = { _, _ -> },
+    onWithdrawTap: (String, String, String) -> Unit,
     onCloseAccountTap: (String) -> Unit,
 ) {
     if (isClosed) {
@@ -167,11 +173,11 @@ private fun AccountDetailsActions(
         ) {
             AccentButtonChip(
                 text = stringResource(R.string.deposit),
-                onClick = { onDepositTap(accountId) }
+                onClick = { onDepositTap(accountId, accountCurrencyType) }
             )
             AccentButtonChip(
                 text = stringResource(R.string.withdraw),
-                onClick = { onWithdrawTap(accountId, moneyAmount) })
+                onClick = { onWithdrawTap(accountId, moneyAmount, accountCurrencyType) })
             AccentButtonChip(
                 text = stringResource(R.string.close),
                 onClick = { onCloseAccountTap(accountId) },

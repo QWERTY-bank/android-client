@@ -46,14 +46,15 @@ private fun LoanListScreenInternal(
     onGetLoanClick: () -> Unit = {},
 ) {
     when {
-        state.isError -> LoansListErrorScreen(modifier = modifier, onRetryClick = onRetryButton)
-        state.isLoading -> LoansListLoadingScreen(modifier = modifier)
         state.loanList.isNotEmpty() -> LoansListContentScreen(
             state = state,
             onLoanTap = onLoanTap,
             onGetLoanTap = onGetLoanClick,
         )
         state.loanList.isEmpty() -> LoansListEmptyScreen(onGetLoanTap = onGetLoanClick)
+        state.isError -> LoansListErrorScreen(modifier = modifier, onRetryClick = onRetryButton)
+        state.isLoading -> LoansListLoadingScreen(modifier = modifier)
+
     }
 }
 

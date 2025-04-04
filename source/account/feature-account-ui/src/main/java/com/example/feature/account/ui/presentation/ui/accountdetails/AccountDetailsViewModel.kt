@@ -1,5 +1,6 @@
 package com.example.feature.account.ui.presentation.ui.accountdetails
 
+import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
@@ -10,16 +11,22 @@ import com.example.feature.account.ui.domain.usecases.SendResultAfterTransaction
 import com.example.feature.account.ui.presentation.ui.model.AccountTransactionsUi
 import com.example.feature.account.ui.presentation.ui.model.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import ru.qwerty.coroutines.runCatchingNonCancellation
 import ru.qwerty.feature.account.api.DeleteAccountUseCase
 import ru.qwerty.feature.account.api.GetAccountBalanceUseCase
 import ru.qwerty.feature.account.api.GetTransactionsByAccountIdUseCase
+import ru.qwerty.feature.account.api.ObtainTransactionsUseCase
 import javax.inject.Inject
 
 /**
@@ -29,6 +36,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class AccountDetailsViewModel @Inject constructor(
     private val getTransactionsByAccountIdUseCase: GetTransactionsByAccountIdUseCase,
+    private val obtainTransactionsUseCase: ObtainTransactionsUseCase,
     private val sendResultAfterTransactionFacade: SendResultAfterTransactionFacade,
     private val sendResultAfterCloseAccountFacade: SendResultAfterCloseAccountFacade,
     private val deleteAccountUseCase: DeleteAccountUseCase,
@@ -46,6 +54,17 @@ internal class AccountDetailsViewModel @Inject constructor(
                 loadAccountTransactions(id.toInt())
             }
         }
+        viewModelScope.launch {
+            obtainAccountTransaction()
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    override fun onCleared() {
+        GlobalScope.launch(Dispatchers.IO) {
+            obtainTransactionsUseCase.closeConnection()
+        }
+        super.onCleared()
     }
 
     fun loadAccountTransactions(id: Int) {
@@ -62,8 +81,26 @@ internal class AccountDetailsViewModel @Inject constructor(
                 }
             }.onSuccess {
                 internalState.update { it.copy(isLoading = false) }
-            }.onFailure {
+                obtainTransactionsUseCase.setupConnection(id.toString())
+            }.onFailure { error ->
+                Log.d("AccountDetailsViewModel", error.message.toString())
                 internalState.update { it.copy(error = true) }
+            }
+        }
+    }
+
+    private suspend fun obtainAccountTransaction() {
+        obtainTransactionsUseCase().collectLatest {
+            internalState.update { state ->
+                val transactionList = state.transactionsUi.transactions.toMutableList()
+                transactionList.add(0, it.second.toUi())
+                state.copy(
+                    accountBalance = it.first.moneyAmount,
+                    transactionsUi = state.transactionsUi.copy(
+                        transactions = transactionList.toImmutableList()
+
+                    )
+                )
             }
         }
     }

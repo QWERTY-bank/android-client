@@ -5,13 +5,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import com.example.feature.account.ui.presentation.ui.accountdetails.AccountDetailsScreen
 import com.example.feature.account.ui.presentation.ui.accountlist.AccountListScreen
 import com.example.feature.account.ui.presentation.ui.deposit.DepositScreen
 import com.example.feature.account.ui.presentation.ui.withdraw.WithdrawScreen
-import ru.qwerty.feature.account.api.domain.MoneyAmount
 
 /**
  * @author y.yangel
@@ -29,12 +27,18 @@ sealed class AccountListRoutes(val route: String) {
     }
 }
 
-fun NavController.navigateToWithdraw(id: String, currentBalance: String) {
-    navigate(WithdrawNavigation(accountId = id, currentBalance = currentBalance))
+fun NavController.navigateToWithdraw(id: String, currentBalance: String, accountCurrencyType: String) {
+    navigate(
+        WithdrawNavigation(
+            accountId = id,
+            currentBalance = currentBalance,
+            accountCurrencyType = accountCurrencyType,
+        )
+    )
 }
 
-fun NavController.navigateToDeposit(id: String) {
-    navigate(DepositNavigation(accountId = id))
+fun NavController.navigateToDeposit(id: String, accountCurrencyType: String) {
+    navigate(DepositNavigation(accountId = id, accountCurrencyType = accountCurrencyType))
 }
 
 fun NavController.navigateToAccountDetails(
@@ -43,6 +47,7 @@ fun NavController.navigateToAccountDetails(
     isClosed: Boolean,
     moneyAmount: String,
     color: Color,
+    accountCurrencyType: String,
 ) {
     navigate(
         AccountNavigation(
@@ -53,6 +58,7 @@ fun NavController.navigateToAccountDetails(
             red = color.red,
             green = color.green,
             blue = color.blue,
+            accountCurrencyType = accountCurrencyType,
         )
     )
 }
@@ -64,9 +70,9 @@ fun NavController.navigateBackToAccountList(graphId: Int) {
 }
 
 fun NavGraphBuilder.buildAccountListsGraph(
-    navigateToWithdraw: (String, String) -> Unit,
-    onNavigateToDetails: (Int, String, Boolean, String, Color) -> Unit,
-    onNavigateToDeposit: (String) -> Unit,
+    navigateToWithdraw: (String, String, String) -> Unit,
+    onNavigateToDetails: (Int, String, Boolean, String, Color, String) -> Unit,
+    onNavigateToDeposit: (String, String) -> Unit,
     onNavigateBackToAccountList: () -> Unit,
     onNavigateBackToDetails: () -> Unit,
     onTakeMoneyButtonTap: () -> Unit,
@@ -85,7 +91,7 @@ fun NavGraphBuilder.buildAccountListsGraph(
             id = account.id,
             isClosed = account.isClosed,
             title = account.title,
-            moneyAmount = account.moneyAmount,
+            accountCurrencyType = account.accountCurrencyType,
             color = color,
             viewModel = hiltViewModel(),
             onClickOnWithdraw = navigateToWithdraw,
@@ -94,12 +100,13 @@ fun NavGraphBuilder.buildAccountListsGraph(
         )
     }
     composable<WithdrawNavigation> { backStackEntry ->
-        val withDraw: WithdrawNavigation = backStackEntry.toRoute()
+        val direction: WithdrawNavigation = backStackEntry.toRoute()
         WithdrawScreen(
-            accountId = withDraw.accountId,
-            currentBalance = withDraw.currentBalance,
+            accountId = direction.accountId,
+            currentBalance = direction.currentBalance,
             viewModel = hiltViewModel(),
             onNavigateToDetails = onNavigateBackToDetails,
+            accountCurrencyType = direction.accountCurrencyType,
         )
     }
     composable<DepositNavigation> { backStackEntry ->
@@ -108,6 +115,7 @@ fun NavGraphBuilder.buildAccountListsGraph(
             accountId = direction.accountId,
             viewModel = hiltViewModel(),
             onNavigateToDetails = onNavigateBackToDetails,
+            accountCurrencyType = direction.accountCurrencyType,
         )
     }
 }

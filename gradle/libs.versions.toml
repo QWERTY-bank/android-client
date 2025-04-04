@@ -5,6 +5,9 @@ agp = "8.8.0"
 appcompat = "1.7.0"
 composeBom = "2025.02.00"
 coreKtx = "1.15.0"
+kotlinxCoroutinesCore = "1.10.1"
+signalR = "7.0.2"
+signalRCoroutines = "0.9.4"
 dagger2 = "2.55"
 espressoCore = "3.6.1"
 jetbrainsKotlinJvm = "2.0.21"
@@ -46,6 +49,7 @@ dagger = { module = "com.google.dagger:dagger", version.ref = "dagger2" }
 daggerCompiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger2" }
 daggerHilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger2" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
+coroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 securityCrypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
 daggerHiltNavigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "daggerHiltNavigation" }
 daggerHiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger2" }
@@ -53,6 +57,8 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlinSerializationConverter = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 okHttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }
 converterGson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+signalR = { module = "com.microsoft.signalr:signalr", version.ref = "signalR" }
+signalRCoroutines = { module = "eu.lepicekmichal.signalrkore:signalrkore", version.ref = "signalRCoroutines" }
 kotlinxSerializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }

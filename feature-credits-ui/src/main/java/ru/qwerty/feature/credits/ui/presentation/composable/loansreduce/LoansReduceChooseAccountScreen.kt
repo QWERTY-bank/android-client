@@ -47,14 +47,14 @@ internal fun LoansReduceChooseAccountScreen(
             onRetryClick = viewModel::loadAccounts
         )
 
-        state.isLoading -> TariffListLoadingScreen(modifier = modifier)
-
         state.accounts.isNotEmpty() -> LoansReduceChooseAccountScreenContent(
             modifier = modifier,
             state = state,
             onAccountTap = onAccountTap,
             creditId = creditId,
         )
+        state.isLoading -> TariffListLoadingScreen(modifier = modifier)
+
     }
 
 }
@@ -94,6 +94,8 @@ private fun LazyListScope.DisplayAccounts(
             balance = account.moneyAmount,
             cardTitle = account.title,
             baseColor = baseColor,
+            accountCurrencyType = account.accountCurrencyType,
+            cardNumber = account.id,
         )
     }
 }

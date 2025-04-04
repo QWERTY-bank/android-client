@@ -39,7 +39,7 @@ internal class DepositViewModel @Inject constructor(
 
     private val transactionKey by lazy { Uuid.random().toString() }
 
-    fun depositOnAccount(depositAmount: Double, accountId: String) {
+    fun depositOnAccount(depositAmount: Double, accountId: String, code: String) {
         viewModelScope.launch {
             runCatchingNonCancellation {
                 if (depositAmount < 1 || depositAmount > 1000000) {
@@ -50,6 +50,7 @@ internal class DepositViewModel @Inject constructor(
                         id = accountId,
                         depositAmount = depositAmount.toString(),
                         key = transactionKey,
+                        code = code,
                     )
                     setSuccessState()
                 }

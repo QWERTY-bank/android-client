@@ -37,6 +37,7 @@ android {
 
 dependencies {
     api(project(":common-network"))
+    implementation(project(":common-coroutines"))
     implementation(project(":source:account:feature-account-api"))
 
     implementation(libs.androidx.appcompat)
@@ -44,6 +45,7 @@ dependencies {
     implementation(libs.daggerHilt)
     implementation(libs.material)
     implementation(libs.kotlinxSerializationJson)
+    implementation(libs.signalRCoroutines)
     implementation(libs.kotlinSerializationConverter)
 
     testImplementation(libs.junit)

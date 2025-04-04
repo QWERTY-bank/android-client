@@ -41,7 +41,8 @@ internal class LoansListViewModel @Inject constructor(
                 internalState.update { state -> state.copy(isLoading = true) }
                 val loans = getLoansUseCase()
                 internalState.update { state ->
-                    state.copy(loanList = loans.map { it.toUi() }.toPersistentList())
+                    state.copy(loanList = loans.map { it.toUi() }.toPersistentList(),
+                        isLoading = false)
                 }
             }.onSuccess {
                 internalState.update { state -> state.copy(isLoading = false) }

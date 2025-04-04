@@ -90,12 +90,15 @@ internal class AccountListViewModel @Inject constructor(
         }
     }
 
-    fun createAccounts(title: String) {
+    fun createAccounts(title: String, amountType: String) {
         viewModelScope.launch {
             runCatchingNonCancellation {
                 if (title.isValidForTitle()) {
                     internalState.setLoadingState()
-                    createAccountUseCase(title.removeAllSpaces())
+                    createAccountUseCase(
+                        title = title.removeAllSpaces(),
+                        amountType = amountType.getAmountType()
+                    )
                     internalState.setLoadingState(isLoading = false)
                 }
             }.onSuccess {
@@ -105,6 +108,14 @@ internal class AccountListViewModel @Inject constructor(
                     state.copy(isError = true)
                 }
             }
+        }
+    }
+
+    private fun String.getAmountType(): String {
+        return when (this) {
+            "₽" -> "Rub"
+            "$" -> "Dollar"
+            else -> "Euro"
         }
     }
 

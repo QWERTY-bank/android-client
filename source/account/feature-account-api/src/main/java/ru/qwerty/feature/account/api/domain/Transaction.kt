@@ -6,4 +6,9 @@ class Transaction(
     val moneyAmount: MoneyAmount = MoneyAmount(),
 )
 
-class MoneyAmount(val value: Double? = null)
+class MoneyAmount(val value: Double? = null, val code: String? = null)
+
+class AccountBalance(
+    val code: String? = null,
+    val moneyAmount: String? = null,
+)

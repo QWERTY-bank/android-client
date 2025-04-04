@@ -50,6 +50,7 @@ import ru.qwerty.common_uikit.component.theme.Colors
 @Composable
 internal fun WithdrawScreen(
     accountId: String,
+    accountCurrencyType: String,
     currentBalance: String,
     viewModel: WithdrawViewModel,
     modifier: Modifier = Modifier,
@@ -83,6 +84,7 @@ internal fun WithdrawScreen(
                 currentBalance = currentBalance.toDouble(),
                 withdrawAmount = state.moneyAmount.toDouble(),
                 accountId = accountId,
+                code = accountCurrencyType
             )
         },
         onError = viewModel::sendErrorNews,

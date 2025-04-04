@@ -15,10 +15,9 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
-
-        buildConfigField("String", "BASE_ACCOUNT_URL", "\"http://89.104.67.17:5003/\"")
-        buildConfigField("String", "BASE_CREDIT_URL", "\"http://89.104.67.17:5002/\"")
-        buildConfigField("String", "BASE_CORE_URL", "\"http://89.104.67.17:5001/\"")
+        buildConfigField("String", "BASE_ACCOUNT_URL", "\"http://95.163.222.150:5003/\"")
+        buildConfigField("String", "BASE_CREDIT_URL", "\"http://95.163.222.150:5002/\"")
+        buildConfigField("String", "BASE_CORE_URL", "\"http://95.163.222.150:5001/\"")
     }
 
     buildTypes {
@@ -41,15 +40,16 @@ android {
 
 dependencies {
     api(libs.retrofit)
-    implementation(libs.securityCrypto)
     implementation(libs.androidx.appcompat)
-    implementation(libs.converterGson)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.material)
+    implementation(libs.converterGson)
     implementation(libs.daggerHilt)
-    implementation(libs.kotlinxSerializationJson)
     implementation(libs.kotlinSerializationConverter)
+    implementation(libs.kotlinxSerializationJson)
+    implementation(libs.material)
     implementation(libs.okHttp3)
+    implementation(libs.securityCrypto)
+    implementation(libs.signalRCoroutines)
 
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit

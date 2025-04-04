@@ -102,23 +102,26 @@ internal fun ComposeNavGraph(modifier: Modifier = Modifier) {
                 onNavigateToLogin = { navController.navigateToLogin() }
             )
             buildAccountListsGraph(
-                navigateToWithdraw = { id, currentBalance ->
+                navigateToWithdraw = { id, currentBalance, accountCurrencyType ->
                     navController.navigateToWithdraw(
                         id = id,
-                        currentBalance = currentBalance
+                        currentBalance = currentBalance,
+                        accountCurrencyType = accountCurrencyType,
                     )
                 },
                 onNavigateToDetails = { id,
                                         title,
                                         isClosed,
                                         moneyAmount,
-                                        color ->
+                                        color,
+                                        accountCurrencyType ->
                     navController.navigateToAccountDetails(
                         id = id,
                         title = title,
                         isClosed = isClosed,
                         moneyAmount = moneyAmount,
-                        color = color
+                        color = color,
+                        accountCurrencyType = accountCurrencyType,
                     )
                 },
                 onNavigateBackToDetails = { navController.popBackStack() },
@@ -127,7 +130,12 @@ internal fun ComposeNavGraph(modifier: Modifier = Modifier) {
                         graphId = navController.graph.id,
                     )
                 },
-                onNavigateToDeposit = { accountId -> navController.navigateToDeposit(accountId) },
+                onNavigateToDeposit = { accountId, accountCurrencyType ->
+                    navController.navigateToDeposit(
+                        accountId,
+                        accountCurrencyType
+                    )
+                },
                 onTakeMoneyButtonTap = { navController.navigateToLoansListScreen() }
             )
         }

@@ -13,6 +13,7 @@ data class AccountNavigation(
     val title: String,
     val isClosed: Boolean,
     val moneyAmount: String,
+    val accountCurrencyType: String,
     val red: Float,
     val green: Float,
     val blue: Float,
@@ -23,8 +24,9 @@ data class AccountNavigation(
 data class WithdrawNavigation(
     val accountId: String,
     val currentBalance: String,
+    val accountCurrencyType: String,
 )
 
 @Serializable
 @Immutable
-data class DepositNavigation(val accountId: String)
+data class DepositNavigation(val accountId: String, val accountCurrencyType: String)

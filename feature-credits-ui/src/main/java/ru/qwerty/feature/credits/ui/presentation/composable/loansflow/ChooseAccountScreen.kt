@@ -112,6 +112,8 @@ private fun LazyListScope.DisplayAccounts(
             balance = account.moneyAmount,
             cardTitle = account.title,
             baseColor = baseColor,
+            accountCurrencyType = account.accountCurrencyType,
+            cardNumber = account.id,
         )
     }
 }

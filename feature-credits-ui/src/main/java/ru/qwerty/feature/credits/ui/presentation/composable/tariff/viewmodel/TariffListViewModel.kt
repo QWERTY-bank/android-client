@@ -1,5 +1,6 @@
 package ru.qwerty.feature.credits.ui.presentation.composable.tariff.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
@@ -40,11 +41,15 @@ internal class TariffListViewModel @Inject constructor(
                 internalState.update { state -> state.copy(isLoading = true) }
                 val tariffList = getTariffUseCase()
                 internalState.update { state ->
-                    state.copy(tariffList = tariffList.map { it.toUi() }.toPersistentList())
+                    state.copy(
+                        tariffList = tariffList.map { it.toUi() }.toPersistentList(),
+                        isLoading = false,
+                    )
                 }
             }.onSuccess {
                 internalState.update { state -> state.copy(isLoading = false) }
-            }.onFailure {
+            }.onFailure { error ->
+                Log.d("Tag", "error", error)
                 internalState.update { state -> state.copy(isError = false) }
             }
         }
@@ -62,7 +67,7 @@ internal data class TariffListState(
 internal data class TariffUi(
     val id: String,
     val name: String,
-    val interestRate: Int,
+    val interestRate: Double,
     val interestRateType: CreditType,
     val minPeriodDays: Int,
     val maxPeriodDays: Int,

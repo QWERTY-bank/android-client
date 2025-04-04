@@ -32,16 +32,15 @@ internal class AccountsRepositoryImpl @Inject constructor(
         return accounts.map { it.toDomain() }
     }
 
-    override suspend fun createAccount(title: String) {
-        accountsService.createAccount(createAccount = CreateAccount(title = title))
+    override suspend fun createAccount(title: String, amountType: String) {
+        accountsService.createAccount(createAccount = CreateAccount(title = title, code = amountType))
         Log.d("AccountsService", "creation success")
     }
 
     override suspend fun getAccountBalance(accountId: String): Double {
         val accountBalance = accountsService
             .getAccountBalance(accountId.toInt())
-            .currencyValues
-            .first()
+            .currencyValue
             .value
         return accountBalance
     }
@@ -51,34 +50,36 @@ internal class AccountsRepositoryImpl @Inject constructor(
         return result.toDomain()
     }
 
-    override suspend fun deposit(id: String, depositAmount: String, key: String) {
+    override suspend fun deposit(id: String, depositAmount: String, key: String, code: String) {
         return accountsService.deposit(
             id = id.toInt(),
             transactionRequest = TransactionRequest(
                 createTransaction(
                     withdrawAmount = depositAmount,
                     key = key,
+                    code = code,
                 )
             ),
         )
     }
 
-    override suspend fun withdraw(id: String, withdrawAmount: String, key: String) {
+    override suspend fun withdraw(id: String, withdrawAmount: String, key: String, code: String) {
         return accountsService.withdraw(
             id = id.toInt(),
             transactionRequest = TransactionRequest(
                 createTransaction(
                     withdrawAmount = withdrawAmount,
                     key = key,
+                    code = code,
                 )
             ),
         )
     }
 
-    private fun createTransaction(withdrawAmount: String, key: String): TransactionApi {
+    private fun createTransaction(withdrawAmount: String, key: String, code: String): TransactionApi {
         val transaction = TransactionApi(
             key = key,
-            moneyAmountApis = listOf(MoneyAmountApi(code = "Rub", value = withdrawAmount.toDouble()))
+            moneyAmountApis = MoneyAmountApi(code = code, value = withdrawAmount.toDouble()),
         )
         return transaction
     }

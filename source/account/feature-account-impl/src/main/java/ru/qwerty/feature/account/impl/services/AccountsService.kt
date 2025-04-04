@@ -1,5 +1,6 @@
 package ru.qwerty.feature.account.impl.services
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -24,13 +25,13 @@ internal interface AccountsService {
     suspend fun createAccount(@Body createAccount: CreateAccount)
 
     @GET("accounts/{id}/balance")
-    suspend fun getAccountBalance(@Path("id") id: Int) : AccountBalanceRequest
+    suspend fun getAccountBalance(@Path("id") id: Int): AccountBalanceRequest
 
     @GET("accounts/{id}/transactions")
     suspend fun getTransaction(@Path("id") id: Int): AccountTransactionApi
 
     @POST("accounts/{id}/deposit")
-    suspend fun deposit(@Path("id") id: Int,  @Body transactionRequest: TransactionRequest)
+    suspend fun deposit(@Path("id") id: Int, @Body transactionRequest: TransactionRequest)
 
     @POST("accounts/{id}/withdraw")
     suspend fun withdraw(@Path("id") id: Int, @Body transactionRequest: TransactionRequest)
@@ -41,4 +42,9 @@ internal interface AccountsService {
 }
 
 @Serializable
-internal class CreateAccount(val title: String)
+internal class CreateAccount(
+    @SerialName("title")
+    val title: String,
+    @SerialName("code")
+    val code: String,
+)

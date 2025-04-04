@@ -6,7 +6,7 @@ package ru.qwerty.feature.credits.api.domain
 class Tariff(
     val id: String,
     val name: String,
-    val interestRate: Int,
+    val interestRate: Double,
     val interestRateType: CreditType,
     val minPeriodDays: Int,
     val maxPeriodDays: Int,

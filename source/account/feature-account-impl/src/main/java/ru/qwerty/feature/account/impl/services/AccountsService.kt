@@ -8,9 +8,9 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import ru.qwerty.feature.account.impl.services.api.AccountApi
+import ru.qwerty.feature.account.impl.services.api.TransferToAccount
 import ru.qwerty.feature.account.impl.services.api.transaction.AccountTransactionApi
 import ru.qwerty.feature.account.impl.services.api.transaction.AccountBalanceRequest
-import ru.qwerty.feature.account.impl.services.api.transaction.TransactionApi
 import ru.qwerty.feature.account.impl.services.api.transaction.TransactionRequest
 
 /**
@@ -39,6 +39,8 @@ internal interface AccountsService {
     @DELETE("accounts/{id}")
     suspend fun deleteAccount(@Path("id") id: Int)
 
+    @POST("accounts/transfer")
+    suspend fun transferToAccount(@Body transferToAccount: TransferToAccount)
 }
 
 @Serializable

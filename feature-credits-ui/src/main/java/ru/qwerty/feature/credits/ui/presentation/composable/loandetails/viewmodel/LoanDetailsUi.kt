@@ -17,7 +17,7 @@ internal data class LoanDetailsUi(
     val debtAmount: String,
     val takingDate: String,
     val nextPayments: ImmutableList<NextPaymentUi>,
-    val paymentHistory: ImmutableList<PaymentHistoryUi>
+    val paymentHistory: ImmutableList<PaymentHistoryUi>,
 )
 
 @Immutable
@@ -31,6 +31,7 @@ internal data class PaymentHistoryUi(
     val paymentAmount: String,
     val paymentDate: String,
     val paymentStatus: String,
+    val paymentType: String,
 )
 
 internal fun LoanDetails.toUi(): LoanDetailsUi {
@@ -56,6 +57,7 @@ internal fun PaymentHistory.toUi(): PaymentHistoryUi {
     return PaymentHistoryUi(
         paymentAmount = "$paymentAmount",
         paymentDate = paymentDateTime,
-        paymentStatus = paymentStatus
+        paymentStatus = paymentStatus,
+        paymentType = paymentType,
     )
 }

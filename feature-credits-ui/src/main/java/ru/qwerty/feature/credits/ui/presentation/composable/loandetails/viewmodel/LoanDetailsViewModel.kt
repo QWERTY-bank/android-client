@@ -9,6 +9,7 @@ import com.example.common_mvvm.MvvmViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.qwerty.feature.credits.api.repository.CreditsRepository
 import ru.qwerty.feature.credits.api.usecases.GetLoanDetailsUseCase
 import javax.inject.Inject
 
@@ -19,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class LoanDetailsViewModel @Inject constructor(
     private val getLoanDetailsUseCase: GetLoanDetailsUseCase,
+    private val creditsRepository: CreditsRepository,
 ) : MvvmViewModel<LoanDetailsState>(LoanDetailsState()) {
 
     fun loadDetails(loanId: String) {
@@ -26,8 +28,13 @@ internal class LoanDetailsViewModel @Inject constructor(
             runCatching {
                 internalState.update { it.copy(isLoading = true) }
                 val details = getLoanDetailsUseCase(id = loanId)
+                val rating = creditsRepository.loadCreditRating()
                 internalState.update {
-                    it.copy(details = details.toUi())
+                    it.copy(
+                        details = details.toUi(),
+                        rating = rating.first,
+                        maxRating = rating.second,
+                    )
                 }
             }.onSuccess {
                 internalState.update { it.copy(isLoading = false) }
@@ -41,6 +48,8 @@ internal class LoanDetailsViewModel @Inject constructor(
 
 @Immutable
 internal data class LoanDetailsState(
+    val rating: Int = 0,
+    val maxRating: Int = 1000,
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val details: LoanDetailsUi? = null,

@@ -114,8 +114,8 @@ internal class AccountListViewModel @Inject constructor(
     private fun String.getAmountType(): String {
         return when (this) {
             "₽" -> "Rub"
-            "$" -> "Dollar"
-            else -> "Euro"
+            "$" -> "Usd"
+            else -> "Eur"
         }
     }
 

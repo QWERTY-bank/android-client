@@ -4,9 +4,11 @@ package com.example.feature.account.ui.presentation.ui.accountdetails
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,16 +18,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.feature.account.ui.R
+import com.example.feature.account.ui.presentation.ui.transfer.externaltransfer.ExternalTransferCard
 import kotlinx.coroutines.flow.collectLatest
 import ru.qwerty.common_uikit.component.BankCardUi
 import ru.qwerty.common_uikit.component.DepositTransactionCard
@@ -49,6 +56,8 @@ internal fun AccountDetailsScreen(
     onClickOnWithdraw: (String, String, String) -> Unit,
     onClickOnDeposit: (String, String) -> Unit,
     onNavigateBackToAccountList: () -> Unit,
+    onBetweenAccountsTap: (String, String, String) -> Unit,
+    onAccountNumberTap: (String, String, String) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -75,6 +84,8 @@ internal fun AccountDetailsScreen(
         onCloseAccountTap = viewModel::closeAccountById,
         accountId = id.toString(),
         accountCurrencyType = accountCurrencyType,
+        onAccountNumberTap = onAccountNumberTap,
+        onBetweenAccountsTap = onBetweenAccountsTap,
     )
 }
 
@@ -91,6 +102,8 @@ private fun AccountDetailsScreenInternal(
     onClickOnWithdraw: (String, String, String) -> Unit,
     onClickOnDeposit: (String, String) -> Unit,
     onCloseAccountTap: (String) -> Unit,
+    onBetweenAccountsTap: (String, String, String) -> Unit,
+    onAccountNumberTap: (String, String, String) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -116,6 +129,8 @@ private fun AccountDetailsScreenInternal(
                 onDepositTap = onClickOnDeposit,
                 accountId = accountId,
                 accountCurrencyType = accountCurrencyType,
+                onBetweenAccountsTap = onBetweenAccountsTap,
+                onAccountNumberTap = onAccountNumberTap,
             )
         }
         when {
@@ -126,8 +141,15 @@ private fun AccountDetailsScreenInternal(
             state.transactionsUi.transactions.isNotEmpty() -> {
                 items(state.transactionsUi.transactions) { item ->
                     when (item.type) {
-                        "Deposit" -> DepositTransactionCard(transactionDeposit = item.moneyAmount.toString())
-                        "Withdraw" -> WithdrawTransactionCard(transactionWithdraw = item.moneyAmount.toString())
+                        "Deposit" -> DepositTransactionCard(
+                            transactionDeposit = item.moneyAmount.toString(),
+                            code = item.code ?: "Rub"
+                        )
+
+                        "Withdraw" -> WithdrawTransactionCard(
+                            transactionWithdraw = item.moneyAmount.toString(),
+                            code = item.code ?: "Rub"
+                        )
                     }
                 }
             }
@@ -142,13 +164,15 @@ private fun AccountDetailsScreenInternal(
 @Composable
 private fun AccountDetailsActions(
     accountId: String,
-    modifier: Modifier,
     isClosed: Boolean,
     moneyAmount: String,
     accountCurrencyType: String,
+    modifier: Modifier = Modifier,
     onDepositTap: (String, String) -> Unit = { _, _ -> },
-    onWithdrawTap: (String, String, String) -> Unit,
-    onCloseAccountTap: (String) -> Unit,
+    onWithdrawTap: (String, String, String) -> Unit = { _, _, _ -> },
+    onCloseAccountTap: (String) -> Unit = {},
+    onBetweenAccountsTap: (String, String, String) -> Unit,
+    onAccountNumberTap: (String, String, String) -> Unit,
 ) {
     if (isClosed) {
         Text(
@@ -164,25 +188,53 @@ private fun AccountDetailsActions(
             )
         )
     } else {
-        FlowRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            AccentButtonChip(
-                text = stringResource(R.string.deposit),
-                onClick = { onDepositTap(accountId, accountCurrencyType) }
-            )
-            AccentButtonChip(
-                text = stringResource(R.string.withdraw),
-                onClick = { onWithdrawTap(accountId, moneyAmount, accountCurrencyType) })
-            AccentButtonChip(
-                text = stringResource(R.string.close),
-                onClick = { onCloseAccountTap(accountId) },
-                containerColor = Colors.PeppyPeacock,
-            )
+        Column {
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                AccentButtonChip(
+                    text = stringResource(R.string.deposit),
+                    onClick = { onDepositTap(accountId, accountCurrencyType) }
+                )
+                AccentButtonChip(
+                    text = stringResource(R.string.withdraw),
+                    onClick = { onWithdrawTap(accountId, moneyAmount, accountCurrencyType) })
+                AccentButtonChip(
+                    text = stringResource(R.string.close),
+                    onClick = { onCloseAccountTap(accountId) },
+                    containerColor = Colors.PeppyPeacock,
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                ) {
+                    ExternalTransferCard(
+                        "Между счетами",
+                        accountId = accountId,
+                        icon = ImageVector.vectorResource(R.drawable.transfer_between),
+                        accountMoneyAmount = moneyAmount,
+                        accountCurrencyType = accountCurrencyType,
+                        onItemClicked = onBetweenAccountsTap,
+                    )
+                    ExternalTransferCard(
+                        "По номеру карты",
+                        accountId = accountId,
+                        icon = ImageVector.vectorResource(R.drawable.transfer_by_number),
+                        accountMoneyAmount = moneyAmount,
+                        onItemClicked = onAccountNumberTap,
+                        accountCurrencyType = accountCurrencyType,
+                    )
+                }
+            }
         }
     }
 }
+
+

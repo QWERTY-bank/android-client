@@ -25,7 +25,7 @@ data class LoanDetails(
     val debtAmount: Double,
     val takingDate: String,
     val nextPayments: List<NextPayment>,
-    val paymentHistory: List<PaymentHistory>
+    val paymentHistory: List<PaymentHistory>,
 )
 
 data class NextPayment(
@@ -36,5 +36,6 @@ data class NextPayment(
 data class PaymentHistory(
     val paymentAmount: Double,
     val paymentDateTime: String,
-    val paymentStatus: String
+    val paymentStatus: String,
+    val paymentType: String,
 )

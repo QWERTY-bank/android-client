@@ -143,7 +143,7 @@ private fun BankCardBackground(baseColor: Color) {
 private fun String.toCurrency(): String {
     return when (this) {
         "Rub" -> "₽"
-        "Euro" -> "€"
+        "Eur" -> "€"
         else -> "$"
     }
 }
@@ -238,7 +238,7 @@ private fun BankCardUiPreview() {
             cardNumber = 9,
             balance = "90110",
             brand = "VISA",
-            accountCurrencyType = "Euro",
+            accountCurrencyType = "Eur",
         )
     }
 }

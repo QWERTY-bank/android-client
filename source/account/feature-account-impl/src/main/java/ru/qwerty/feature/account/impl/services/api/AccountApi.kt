@@ -2,6 +2,8 @@ package ru.qwerty.feature.account.impl.services.api
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import ru.qwerty.feature.account.api.domain.Transaction
+import ru.qwerty.feature.account.impl.services.api.transaction.TransactionApi
 
 @Serializable
 internal class AccountApi(
@@ -23,4 +25,12 @@ internal class MoneyAmountApi(
     val code: String,
     @SerialName("value")
     val value: Double?,
+)
+
+
+@Serializable
+internal data class TransferToAccount(
+    val fromAccountId: Int,
+    val toAccountId: Int,
+    val transaction: TransactionApi,
 )

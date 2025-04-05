@@ -24,4 +24,12 @@ interface AccountsRepository {
     suspend fun withdraw(id: String, withdrawAmount: String, key: String, code: String)
 
     suspend fun deleteAccount(id: String)
+
+    suspend fun transferToAccount(
+        fromAccountId: String,
+        toAccountId: String,
+        amount: String,
+        key: String,
+        code: String
+    )
 }

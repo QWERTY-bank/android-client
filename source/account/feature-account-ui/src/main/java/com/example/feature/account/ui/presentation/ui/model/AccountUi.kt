@@ -29,7 +29,8 @@ data class AccountTransactionsUi(
 data class TransactionUi(
     val key: String? = null,
     val type: String? = null,
-    val moneyAmount: Double = 0.0
+    val moneyAmount: Double = 0.0,
+    val code: String?,
 )
 
 internal fun Account.toUi(): AccountUi {
@@ -53,8 +54,9 @@ internal fun AccountTransactions.toUi(): AccountTransactionsUi {
 
 internal fun Transaction.toUi(): TransactionUi {
     return TransactionUi(
-        key = this.key,
-        type = this.type,
-        moneyAmount = this.moneyAmount.value ?: 0.0
+        key = key,
+        type = type,
+        moneyAmount = moneyAmount.value ?: 0.0,
+        code = moneyAmount.code,
     )
 }

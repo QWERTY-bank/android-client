@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ru.qwerty.common_uikit.component.LoanCard
 import ru.qwerty.common_uikit.component.LoanDetailsCard
 import ru.qwerty.common_uikit.component.NextPaymentCard
 import ru.qwerty.common_uikit.component.PaymentHistoryCard
@@ -22,6 +21,7 @@ import ru.qwerty.feature.credits.api.domain.LoanDetails
 import ru.qwerty.feature.credits.api.domain.NextPayment
 import ru.qwerty.feature.credits.api.domain.PaymentHistory
 import ru.qwerty.feature.credits.api.domain.Tariff
+import ru.qwerty.feature.credits.ui.presentation.composable.loandetails.viewmodel.LoanDetailsState
 import ru.qwerty.feature.credits.ui.presentation.composable.loandetails.viewmodel.LoanDetailsUi
 import ru.qwerty.feature.credits.ui.presentation.composable.loandetails.viewmodel.toUi
 import ru.qwerty.feature.credits.ui.presentation.composable.loans.SectionTitle
@@ -31,6 +31,7 @@ import ru.qwerty.feature.credits.ui.presentation.composable.loans.SectionTitle
  */
 @Composable
 internal fun LoanDetailsScreenContent(
+    state: LoanDetailsState,
     loanDetails: LoanDetailsUi,
     modifier: Modifier = Modifier,
     onPayClick: (String) -> Unit,
@@ -42,6 +43,7 @@ internal fun LoanDetailsScreenContent(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
+        item { SectionTitle(text = "Ваш кредитный рейтинг ${state.rating} из ${state.maxRating}") }
         item { SectionTitle(text = "Детали кредита") }
         item {
             LoanDetailsCard(
@@ -73,6 +75,7 @@ internal fun LoanDetailsScreenContent(
                     paymentAmount = paymentHistory.paymentAmount,
                     paymentDate = paymentHistory.paymentDate,
                     paymentStatus = paymentHistory.paymentStatus,
+                    paymentType = paymentHistory.paymentType,
                 )
             }
         }
@@ -97,6 +100,7 @@ private fun LoanDetailsScreenContentPreview() {
     LoanDetailsScreenContent(
         loanDetails = loanDetails,
         onPayClick = {},
+        state = LoanDetailsState(),
     )
 }
 
@@ -127,7 +131,8 @@ internal val loanDetails = LoanDetails(
         PaymentHistory(
             paymentAmount = 200.0,
             paymentDateTime = "2025-03-09T12:00:00Z",
-            paymentStatus = "Conducted"
+            paymentStatus = "Conducted",
+            paymentType = "status",
         )
     )
 ).toUi()

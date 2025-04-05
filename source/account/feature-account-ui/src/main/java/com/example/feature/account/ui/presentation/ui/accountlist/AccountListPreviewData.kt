@@ -21,7 +21,7 @@ internal object AccountListPreviewData {
             isClosed = true,
             title = "Счет для путешествий",
             userId = "user2",
-            accountCurrencyType = "Euro",
+            accountCurrencyType = "Eur",
         ),
         AccountUi(
             id = 3,
@@ -29,7 +29,7 @@ internal object AccountListPreviewData {
             isClosed = false,
             title = "Кредитный счет",
             userId = "user3",
-            accountCurrencyType = "Dollar",
+            accountCurrencyType = "Usd",
         ),
         AccountUi(
             id = 4,

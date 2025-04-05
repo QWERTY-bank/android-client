@@ -39,6 +39,9 @@ internal interface CreditService {
         @Path("creditId") id: String,
         @Body reduceLoanPayment: ReduceLoanPayment,
     )
+
+    @GET("api/User")
+    suspend fun getLoanRating() : Credit
 }
 
 @Serializable
@@ -46,4 +49,10 @@ internal class ReduceLoanPayment(
     val key: String,
     val accountId: Int,
     val value: Double,
+)
+
+@Serializable
+data class Credit(
+    val rating: Int,
+    val maxRating: Int,
 )

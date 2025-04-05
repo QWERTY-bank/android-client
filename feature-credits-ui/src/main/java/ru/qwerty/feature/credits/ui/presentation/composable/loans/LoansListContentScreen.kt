@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -47,6 +46,7 @@ internal fun LoansListContentScreen(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically)
     ) {
+        item { SectionTitle(text = "Ваш кредитный рейтинг ${state.rating} из ${state.maxRating}") }
         item { SectionTitle(text = "Список кредитов") }
         DisplayLoan(
             state.loanList.filter { it.status == LoanStatus.ACTIVE || it.status == LoanStatus.REQUESTED },
@@ -102,6 +102,7 @@ fun SectionTitle(modifier: Modifier = Modifier, text: String) {
 
 @Composable
 internal fun LoansListEmptyScreen(
+    state: LoanListState,
     modifier: Modifier = Modifier,
     onGetLoanTap: () -> Unit,
 ) {
@@ -112,6 +113,7 @@ internal fun LoansListEmptyScreen(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
+        item { SectionTitle(text = "Ваш кредитный рейтинг ${state.rating} из ${state.maxRating}") }
         item { SectionTitle(text = "Список кредитов") }
         item {
             AccentButton(

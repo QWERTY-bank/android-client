@@ -22,7 +22,7 @@ internal data class LoanResponseApi(
     val debtAmount: Double,
     val takingDate: String,
     val nextPayments: List<NextPaymentApi>,
-    val paymentHistory: List<PaymentHistoryApi>
+    val paymentHistory: List<PaymentHistoryApi>,
 )
 
 @Serializable
@@ -36,4 +36,5 @@ internal data class PaymentHistoryApi(
     val paymentAmount: Double,
     val paymentDateTime: String,
     val paymentStatus: String,
+    val paymentType: String,
 )

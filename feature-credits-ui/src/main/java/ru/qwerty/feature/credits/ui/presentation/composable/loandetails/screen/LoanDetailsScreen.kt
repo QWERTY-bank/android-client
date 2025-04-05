@@ -62,6 +62,7 @@ private fun LoanDetailsScreenInternal(
             modifier = modifier,
             loanDetails = state.details,
             onPayClick = onPayClick,
+            state = state,
         )
 
         state.isError -> LoanDetailsErrorScreen(modifier = modifier, onRetryClick = onRetryClick)

@@ -16,14 +16,10 @@ import com.example.feature.account.ui.presentation.ui.withdraw.WithdrawScreen
  */
 sealed class AccountListRoutes(val route: String) {
     data object AccountListScreen : AccountListRoutes(ACCOUNT_LIST_NAVIGATION_KEY)
-    data object AccountDetailsScreen : AccountListRoutes(ACCOUNT_DETAILS_NAVIGATION_KEY)
-    data object WithdrawDetailsScreen : AccountListRoutes(WITHDRAW_NAVIGATION_KEY)
 
 
     private companion object {
         private const val ACCOUNT_LIST_NAVIGATION_KEY = "account-list"
-        private const val ACCOUNT_DETAILS_NAVIGATION_KEY = "account_details"
-        private const val WITHDRAW_NAVIGATION_KEY = "withdraw_key"
     }
 }
 
@@ -76,6 +72,8 @@ fun NavGraphBuilder.buildAccountListsGraph(
     onNavigateBackToAccountList: () -> Unit,
     onNavigateBackToDetails: () -> Unit,
     onTakeMoneyButtonTap: () -> Unit,
+    onBetweenAccountsTap: (String, String, String) -> Unit,
+    onAccountNumberTap: (String, String, String) -> Unit,
 ) {
     composable(route = AccountListRoutes.AccountListScreen.route) {
         AccountListScreen(
@@ -97,6 +95,8 @@ fun NavGraphBuilder.buildAccountListsGraph(
             onClickOnWithdraw = navigateToWithdraw,
             onClickOnDeposit = onNavigateToDeposit,
             onNavigateBackToAccountList = onNavigateBackToAccountList,
+            onBetweenAccountsTap = onBetweenAccountsTap,
+            onAccountNumberTap = onAccountNumberTap,
         )
     }
     composable<WithdrawNavigation> { backStackEntry ->

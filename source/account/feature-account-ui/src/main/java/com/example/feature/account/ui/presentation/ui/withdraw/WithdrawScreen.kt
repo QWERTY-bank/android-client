@@ -167,7 +167,7 @@ private fun WithdrawContentScreen(
         )
         Spacer(modifier = Modifier.height(24.dp))
         ComposeTextField(
-            placeHolderText = "0 ₽",
+            placeHolderText = "Введите сумму",
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             textFieldValue = state.moneyAmount,
             onValueChange = { onMoneyAmountChanged(it) }

@@ -22,7 +22,7 @@ internal fun LoanResponseApi.toDomain(): LoanDetails {
         debtAmount = debtAmount,
         takingDate = takingDate,
         nextPayments = nextPayments.map { it.toDomain() },
-        paymentHistory = paymentHistory.map { it.toDomain() }
+        paymentHistory = paymentHistory.map { it.toDomain() },
     )
 }
 
@@ -37,7 +37,8 @@ internal fun PaymentHistoryApi.toDomain(): PaymentHistory {
     return PaymentHistory(
         paymentAmount = paymentAmount,
         paymentDateTime = paymentDateTime,
-        paymentStatus = paymentStatus
+        paymentStatus = paymentStatus,
+        paymentType = paymentType,
     )
 }
 

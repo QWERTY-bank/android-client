@@ -28,7 +28,18 @@ import ru.qwerty.common_uikit.component.theme.Colors
  */
 @Composable
 @Preview
-fun DepositTransactionCard(modifier: Modifier = Modifier, transactionDeposit: String = "5000") {
+fun DepositTransactionCard(
+    modifier: Modifier = Modifier,
+    transactionDeposit: String = "5000",
+    code: String = "Usd"
+) {
+
+    val type = when (code) {
+        "Rub" -> "₽"
+        "Usd" -> "$"
+        else -> "€"
+    }
+
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
@@ -60,7 +71,7 @@ fun DepositTransactionCard(modifier: Modifier = Modifier, transactionDeposit: St
                 )
             )
             Text(
-                text = "+$transactionDeposit ₽",
+                text = "+$transactionDeposit $type",
                 modifier = Modifier
                     .padding(end = 16.dp)
                     .fillMaxWidth(),
@@ -79,7 +90,18 @@ fun DepositTransactionCard(modifier: Modifier = Modifier, transactionDeposit: St
 
 @Composable
 @Preview
-fun WithdrawTransactionCard(modifier: Modifier = Modifier, transactionWithdraw: String = "5000") {
+fun WithdrawTransactionCard(
+    modifier: Modifier = Modifier,
+    transactionWithdraw: String = "5000",
+    code: String = "Eur"
+) {
+
+    val type = when (code) {
+        "Rub" -> "₽"
+        "Usd" -> "$"
+        else -> "€"
+    }
+
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
@@ -111,7 +133,7 @@ fun WithdrawTransactionCard(modifier: Modifier = Modifier, transactionWithdraw: 
                 )
             )
             Text(
-                text = "-$transactionWithdraw ₽",
+                text = "-$transactionWithdraw $type",
                 modifier = Modifier
                     .padding(end = 16.dp)
                     .fillMaxWidth(),

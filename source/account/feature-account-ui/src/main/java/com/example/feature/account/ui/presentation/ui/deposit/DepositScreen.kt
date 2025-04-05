@@ -73,6 +73,7 @@ internal fun DepositScreen(
             }
         }
     }
+
     DepositScreenInternal(
         modifier = modifier,
         state = state,
@@ -163,7 +164,7 @@ private fun DepositContent(
         )
         Spacer(modifier = Modifier.height(24.dp))
         ComposeTextField(
-            placeHolderText = "0 ₽",
+            placeHolderText = "Введите сумму",
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             textFieldValue = state.moneyAmount,
             onValueChange = { onMoneyAmountChanged(it) }

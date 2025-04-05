@@ -54,11 +54,17 @@ internal class CreditsRepositoryImpl @Inject constructor(
         value: Double,
     ) {
         return creditService.reduceLoanPayment(
-            id = creditId, reduceLoanPayment = ReduceLoanPayment(
+            id = creditId,
+            reduceLoanPayment = ReduceLoanPayment(
                 key = key,
                 accountId = accountId,
                 value = value,
             )
         )
+    }
+
+    override suspend fun loadCreditRating(): Pair<Int, Int> {
+        val rating = creditService.getLoanRating()
+        return Pair(rating.rating, rating.maxRating)
     }
 }

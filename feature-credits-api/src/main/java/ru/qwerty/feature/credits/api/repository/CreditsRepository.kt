@@ -24,4 +24,6 @@ interface CreditsRepository {
     suspend fun getLoanDetails(id: String): LoanDetails
 
     suspend fun reduceLoanPayments(creditId: String, key: String, accountId: Int, value: Double)
+
+    suspend fun loadCreditRating() : Pair<Int, Int>
 }

@@ -165,13 +165,13 @@ private fun DepositContent(
         )
         Spacer(modifier = Modifier.height(24.dp))
         ComposeTextField(
-            placeHolderText = "0 ₽",
+            placeHolderText = "0",
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             textFieldValue = state.moneyAmount,
             onValueChange = { onMoneyAmountChanged(it) }
         )
         Text(
-            text = "Сумма на вашем счете: $accountMoneyAmount ₽",
+            text = "Сумма на вашем счете: $accountMoneyAmount",
             modifier = Modifier
                 .padding(top = 8.dp)
                 .fillMaxWidth(),

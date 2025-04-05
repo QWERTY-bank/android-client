@@ -11,8 +11,8 @@ import ru.qwerty.feature.account.impl.services.api.transaction.TransactionApi
 internal fun AccountTransactionApi.toDomain(): AccountTransactions {
     return AccountTransactions(
         transaction = transactions.map { it.toDomain() },
-        depositCurrencyTotals = depositCurrencyTotals.firstOrNull()?.value,
-        withdrawCurrencyTotals = withdrawCurrencyTotals.firstOrNull()?.value,
+        depositCurrencyTotals = depositCurrencyTotals.value,
+        withdrawCurrencyTotals = withdrawCurrencyTotals.value,
     )
 }
 
@@ -20,6 +20,6 @@ internal fun TransactionApi.toDomain(): Transaction {
     return Transaction(
         key = key,
         type = type,
-        moneyAmount = moneyAmountApis.first().toDomain()
+        moneyAmount = moneyAmountApis.toDomain()
     )
 }

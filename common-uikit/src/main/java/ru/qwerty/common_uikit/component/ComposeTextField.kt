@@ -135,6 +135,7 @@ fun ComposePasswordTextField(
                     Text(
                         text = placeHolderText,
                         style = MediumFontStyle,
+                        color = JetBlack
                     )
                 }
                 Icon(

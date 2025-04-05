@@ -50,6 +50,7 @@ import ru.qwerty.common_uikit.component.theme.Colors
 @Composable
 internal fun DepositScreen(
     accountId: String,
+    accountCurrencyType: String,
     viewModel: DepositViewModel,
     modifier: Modifier = Modifier,
     onNavigateToDetails: () -> Unit = {},
@@ -81,6 +82,7 @@ internal fun DepositScreen(
             viewModel.depositOnAccount(
                 depositAmount = state.moneyAmount.toDouble(),
                 accountId = accountId,
+                code = accountCurrencyType,
             )
         },
         onError = viewModel::sendErrorNews,

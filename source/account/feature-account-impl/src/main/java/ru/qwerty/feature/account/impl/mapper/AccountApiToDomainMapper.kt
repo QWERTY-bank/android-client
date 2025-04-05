@@ -9,14 +9,9 @@ import ru.qwerty.feature.account.impl.services.api.MoneyAmountApi
  * @author y.yangel
  */
 internal fun AccountApi.toDomain(): Account {
-    val moneyAmount =
-        if (moneyAmountApis.isEmpty()) {
-            MoneyAmount(value = null)
-        } else moneyAmountApis.first().toDomain()
-
     return Account(
         id = id,
-        moneyAmount = moneyAmount,
+        moneyAmount = moneyAmountApis.toDomain(),
         isClosed = isClosed,
         title = title,
         userId = userId,
@@ -24,5 +19,5 @@ internal fun AccountApi.toDomain(): Account {
 }
 
 internal fun MoneyAmountApi.toDomain(): MoneyAmount {
-    return MoneyAmount(value = value)
+    return MoneyAmount(value = value, code = code)
 }

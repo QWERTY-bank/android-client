@@ -17,11 +17,13 @@ import ru.qwerty.feature.account.api.GetTransactionsByAccountIdUseCaseProvider
 import ru.qwerty.feature.account.api.GetUserAccountUseCase
 import ru.qwerty.feature.account.api.GetUserAccountUseCaseImpl
 import ru.qwerty.feature.account.api.GetUserAccountUseCaseProvider
+import ru.qwerty.feature.account.api.ObtainTransactionsUseCase
 import ru.qwerty.feature_account_auth_api.IsUserAlreadyLoginUseCase
 import ru.qwerty.feature_account_auth_api.IsUserAlreadyLoginUseCaseProvider
 import ru.qwerty.feature.account.api.WithdrawUseCase
 import ru.qwerty.feature.account.api.WithdrawUseCaseProvider
 import ru.qwerty.feature.account.api.repository.AccountsRepository
+import ru.qwerty.feature.account.api.repository.TransactionRepository
 import ru.qwerty.feature_account_auth_api.repository.AccountRepository
 
 /**
@@ -69,5 +71,10 @@ object FeatureAccountModule {
     @Provides
     fun provideGetAccountBalanceUseCase(accountsRepository: AccountsRepository): GetAccountBalanceUseCase {
         return GetAccountBalanceUseCaseProvider(accountsRepository).useCase
+    }
+
+    @Provides
+    fun provideObtainTransactionsUseCase(transactionRepository: TransactionRepository) : ObtainTransactionsUseCase {
+        return ObtainTransactionsUseCase(transactionRepository)
     }
 }

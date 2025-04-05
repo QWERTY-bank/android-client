@@ -33,7 +33,7 @@ import ru.qwerty.common_uikit.component.theme.Colors
 @Composable
 internal fun AccountListScreen(
     viewModel: AccountListViewModel,
-    onNavigateToAccountDetails: (Int, String, Boolean, String, Color) -> Unit,
+    onNavigateToAccountDetails: (Int, String, Boolean, String, Color, String) -> Unit,
     onTakeMoneyButtonTap: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -50,8 +50,8 @@ internal fun AccountListScreen(
 private fun AccountListScreenInternal(
     modifier: Modifier = Modifier,
     state: AccountListState,
-    onCreateAccountTap: (String) -> Unit = {},
-    onNavigateToAccountDetails: (Int, String, Boolean, String, Color) -> Unit,
+    onCreateAccountTap: (String, String) -> Unit,
+    onNavigateToAccountDetails: (Int, String, Boolean, String, Color, String) -> Unit,
     onRetryButtonClicked: () -> Unit,
     onTakeMoneyButtonTap: () -> Unit,
 ) {

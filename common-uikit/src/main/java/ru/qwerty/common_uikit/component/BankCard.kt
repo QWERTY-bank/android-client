@@ -49,13 +49,15 @@ val LatoFont = FontFamily(
     Font(R.font.poppins_thin_italic, FontWeight.Thin, FontStyle.Italic)
 )
 
+
 @Composable
 fun BankCardUi(
     balance: String,
     cardTitle: String,
+    accountCurrencyType: String,
     modifier: Modifier = Modifier,
     baseColor: Color = BlueDepression,
-    cardHolder: String = "Oleg Tinkov",
+    cardNumber: Int,
     brand: String = "VISA"
 ) {
     val bankCardAspectRatio = 1.586f
@@ -75,8 +77,8 @@ fun BankCardUi(
                 left = true
             ) {
                 BankCardLabelAndText(
-                    label = stringResource(R.string.card_holder),
-                    text = cardHolder,
+                    label = "Номер счета",
+                    text = cardNumber.toString(),
                 )
             }
             SpaceWrapper(
@@ -88,7 +90,7 @@ fun BankCardUi(
                 Row {
                     BankCardLabelAndText(
                         label = stringResource(R.string.available_balance),
-                        text = "$balance ₽",
+                        text = "${accountCurrencyType.toCurrency()} $balance",
                     )
                 }
             }
@@ -135,6 +137,14 @@ private fun BankCardBackground(baseColor: Color) {
             center = Offset(x = size.width * 0.1f, y = size.height * 0.3f),
             radius = size.minDimension * 0.75f
         )
+    }
+}
+
+private fun String.toCurrency(): String {
+    return when (this) {
+        "Rub" -> "₽"
+        "Euro" -> "€"
+        else -> "$"
     }
 }
 
@@ -214,7 +224,7 @@ private fun SpaceWrapper(
 }
 
 @Composable
-@Preview(locale = "ru")
+@Preview
 private fun BankCardUiPreview() {
     Box(
         Modifier
@@ -225,9 +235,10 @@ private fun BankCardUiPreview() {
             modifier = Modifier.align(Alignment.Center),
             baseColor = BlueDepression,
             cardTitle = "For University",
-            cardHolder = "Oleg Tinkoff",
-            balance = "$90110",
-            brand = "VISA"
+            cardNumber = 9,
+            balance = "90110",
+            brand = "VISA",
+            accountCurrencyType = "Euro",
         )
     }
 }

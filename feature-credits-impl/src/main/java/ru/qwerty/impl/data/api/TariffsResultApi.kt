@@ -13,7 +13,7 @@ internal class TariffsResultApi(val results: List<TariffsApi>)
 internal class TariffsApi(
     val id: String,
     val name: String,
-    val interestRate: Int,
+    val interestRate: Double,
     val interestRateType: CreditTypeApi,
     val minPeriodDays: Int,
     val maxPeriodDays: Int,

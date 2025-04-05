@@ -14,7 +14,8 @@ data class AccountUi(
     val moneyAmount: String,
     val isClosed: Boolean,
     val title: String,
-    val userId: String
+    val userId: String,
+    val accountCurrencyType: String,
 )
 
 @Immutable
@@ -37,7 +38,8 @@ internal fun Account.toUi(): AccountUi {
         moneyAmount = this.moneyAmount.value.toString(),
         isClosed = this.isClosed,
         title = this.title,
-        userId = this.userId
+        userId = this.userId,
+        accountCurrencyType = moneyAmount.code ?: "Rub",
     )
 }
 

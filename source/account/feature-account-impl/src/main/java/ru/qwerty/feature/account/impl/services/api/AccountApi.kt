@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal class AccountApi(
-    @SerialName("currencyValues")
-    val moneyAmountApis: List<MoneyAmountApi>,
+    @SerialName("currencyValue")
+    val moneyAmountApis: MoneyAmountApi,
     @SerialName("id")
     val id: Int,
     @SerialName("isClosed")

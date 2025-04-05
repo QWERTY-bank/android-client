@@ -1,12 +1,12 @@
 package ru.qwerty.ui.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
 import com.example.common_mvvm.MvvmState
 import com.example.common_mvvm.MvvmViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.qwerty.coroutines.runCatchingNonCancellation
-import ru.qwerty.feature_account_auth_api.IsUserAlreadyLoginUseCase
 import ru.qwerty.feature_account_auth_api.accounts.LoginUserByPhoneUseCase
 import ru.qwerty.ui.domain.ValidatePasswordInputUseCase
 import ru.qwerty.ui.domain.ValidatePhoneInputUseCase
@@ -57,6 +56,7 @@ internal class AccountViewModel @Inject constructor(
             }.onSuccess {
                 _news.tryEmit(AccountNews.NavigateToAccountListScreenNews)
             }.onFailure { error ->
+                Log.d("AccountViewModel", "error", error)
                 internalState.setErrorState()
             }
         }
@@ -112,16 +112,19 @@ internal sealed interface AccountNews {
     data object NavigateToAccountListScreenNews : AccountNews
 }
 
+@Immutable
 internal data class AccountState(
     val accountRemoteState: AccountRemoteState = AccountRemoteState(),
     val accountUiState: AccountUiState = AccountUiState(),
 ) : MvvmState
 
+@Immutable
 internal data class AccountRemoteState(
     val isLoading: Boolean = false,
     val error: Boolean = false,
 )
 
+@Stable
 internal data class AccountUiState(
     val phone: String = "",
     val password: String = "",

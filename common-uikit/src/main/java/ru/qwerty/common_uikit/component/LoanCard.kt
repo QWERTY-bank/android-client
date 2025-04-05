@@ -1,5 +1,6 @@
 package ru.qwerty.common_uikit.component
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -98,7 +99,7 @@ fun LoanCard(
                     )
                 )
                 Text(
-                    text = "Сумма кредита $debtAmount ₽",
+                    text = "Сумма кредита $debtAmount",
                     modifier = Modifier.padding(start = 16.dp, top = 8.dp),
                     style = TextStyle(
                         fontFamily = LatoFont,
@@ -122,7 +123,7 @@ fun LoanCard(
                     )
                 )
                 Text(
-                    text = "На сумму $nextPaymentAmount ₽",
+                    text = "На сумму $nextPaymentAmount",
                     modifier = Modifier.padding(start = 16.dp, top = 8.dp),
                     style = TextStyle(
                         fontFamily = LatoFont,
@@ -210,7 +211,7 @@ fun LoanDetailsCard(
                     )
                 )
                 Text(
-                    text = "Сумма кредита $debtAmount ₽",
+                    text = "Сумма кредита $debtAmount",
                     modifier = Modifier.padding(start = 16.dp, top = 8.dp),
                     style = TextStyle(
                         fontFamily = LatoFont,
@@ -289,7 +290,7 @@ fun NextPaymentCard(
                     )
                 )
                 Text(
-                    text = "На сумму $nextPaymentAmount ₽",
+                    text = "На сумму $nextPaymentAmount",
                     modifier = Modifier.padding(start = 16.dp, top = 8.dp),
                     style = TextStyle(
                         fontFamily = LatoFont,
@@ -313,6 +314,7 @@ fun NextPaymentCard(
 @Composable
 @Preview
 fun PaymentHistoryCard(
+    paymentType: String = "ReduceDebt",
     paymentAmount: String = "5000",
     paymentDate: String = "2025-03-09T12:54:03.295Z",
     paymentStatus: String = "Conducted",
@@ -321,6 +323,7 @@ fun PaymentHistoryCard(
         when (paymentStatus) {
             "InProcess" -> "Оплачивается"
             "Conducted" -> "Оплачен"
+            "Overdue" -> "Просрочен"
             else -> "Отменен"
         }
 
@@ -331,6 +334,12 @@ fun PaymentHistoryCard(
             else -> Colors.PeppyPeacock
         }
 
+    val status = when (paymentType) {
+        "ReduceDebt" -> "Досрочная оплата"
+        "Repayment" -> "Автоматическое списание"
+        else -> "Списание"
+    }
+    Log.d("status", paymentType)
 
     ElevatedCard(
         colors = CardDefaults.cardColors(
@@ -347,7 +356,7 @@ fun PaymentHistoryCard(
         ) {
             Column {
                 Text(
-                    text = "Досрочное погашение",
+                    text = status,
                     modifier = Modifier
                         .padding(start = 16.dp),
                     style = TextStyle(
@@ -360,7 +369,7 @@ fun PaymentHistoryCard(
                     )
                 )
                 Text(
-                    text = "$paymentAmount ₽",
+                    text = paymentAmount,
                     modifier = Modifier.padding(start = 16.dp, top = 8.dp),
                     style = TextStyle(
                         fontFamily = LatoFont,

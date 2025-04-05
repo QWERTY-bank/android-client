@@ -18,6 +18,10 @@ import com.example.feature.account.ui.presentation.ui.navigation.navigateBackToA
 import com.example.feature.account.ui.presentation.ui.navigation.navigateToAccountDetails
 import com.example.feature.account.ui.presentation.ui.navigation.navigateToDeposit
 import com.example.feature.account.ui.presentation.ui.navigation.navigateToWithdraw
+import com.example.feature.account.ui.presentation.ui.transfer.navigation.navigateToSelfTransferActionScreen
+import com.example.feature.account.ui.presentation.ui.transfer.navigation.navigateToSelfTransferScreen
+import com.example.feature.account.ui.presentation.ui.transfer.navigation.navigateToTransferActionScreen
+import com.example.feature.account.ui.presentation.ui.transfer.navigation.selfTransferGraph
 import dagger.hilt.android.AndroidEntryPoint
 import ru.qwerty.bank.ui.theme.QwertybankTheme
 import ru.qwerty.feature.credits.ui.presentation.navigation.buildCreditsFeatureGraph
@@ -98,8 +102,27 @@ internal fun ComposeNavGraph(modifier: Modifier = Modifier) {
                 onPayClick = { loanId -> navController.navigateToLoansReduceChooseAccount(loanId) },
             )
             buildAccountGraph(
-                onNavigateToAccountList = { navController.navigateToAccountList() },
+                onNavigateToAccountList = {
+                    navController.navigateBackToAccountList(
+                        graphId = navController.graph.id,
+                    )
+                },
                 onNavigateToLogin = { navController.navigateToLogin() }
+            )
+            selfTransferGraph(
+                onAccountTap = { fromAccountId, toAccountId, moneyAmount, code ->
+                    navController.navigateToSelfTransferActionScreen(
+                        fromAccountId = fromAccountId,
+                        toAccountId = toAccountId,
+                        moneyAmount = moneyAmount,
+                        code = code,
+                    )
+                },
+                navigateToMainScreen = {
+                    navController.navigateBackToAccountList(
+                        graphId = navController.graph.id,
+                    )
+                }
             )
             buildAccountListsGraph(
                 navigateToWithdraw = { id, currentBalance, accountCurrencyType ->
@@ -136,7 +159,13 @@ internal fun ComposeNavGraph(modifier: Modifier = Modifier) {
                         accountCurrencyType
                     )
                 },
-                onTakeMoneyButtonTap = { navController.navigateToLoansListScreen() }
+                onTakeMoneyButtonTap = { navController.navigateToLoansListScreen() },
+                onBetweenAccountsTap = { fromAccountId, moneyAmount, code ->
+                    navController.navigateToSelfTransferScreen(fromAccountId, moneyAmount, code)
+                },
+                onAccountNumberTap = { fromAccountId, moneyAmount, code ->
+                    navController.navigateToTransferActionScreen(fromAccountId, moneyAmount, code)
+                },
             )
         }
     }

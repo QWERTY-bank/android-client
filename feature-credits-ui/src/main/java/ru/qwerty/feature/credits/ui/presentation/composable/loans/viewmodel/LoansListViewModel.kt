@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.qwerty.feature.credits.api.domain.Loan
 import ru.qwerty.feature.credits.api.domain.LoanStatus
+import ru.qwerty.feature.credits.api.repository.CreditsRepository
 import ru.qwerty.feature.credits.api.usecases.GetLoansUseCase
 import javax.inject.Inject
 
@@ -25,7 +26,8 @@ import javax.inject.Inject
 @Stable
 @HiltViewModel
 internal class LoansListViewModel @Inject constructor(
-    private val getLoansUseCase: GetLoansUseCase
+    private val getLoansUseCase: GetLoansUseCase,
+    private val creditsRepository: CreditsRepository,
 ) : MvvmViewModel<LoanListState>(LoanListState()) {
 
     val state: StateFlow<LoanListState>
@@ -40,9 +42,14 @@ internal class LoansListViewModel @Inject constructor(
             runCatching {
                 internalState.update { state -> state.copy(isLoading = true) }
                 val loans = getLoansUseCase()
+                val creditRating = creditsRepository.loadCreditRating()
                 internalState.update { state ->
-                    state.copy(loanList = loans.map { it.toUi() }.toPersistentList(),
-                        isLoading = false)
+                    state.copy(
+                        loanList = loans.map { it.toUi() }.toPersistentList(),
+                        isLoading = false,
+                        rating = creditRating.first,
+                        maxRating = creditRating.second,
+                    )
                 }
             }.onSuccess {
                 internalState.update { state -> state.copy(isLoading = false) }
@@ -59,6 +66,8 @@ internal class LoansListViewModel @Inject constructor(
 internal data class LoanListState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
+    val rating: Int = 0,
+    val maxRating: Int = 100,
     val loanList: ImmutableList<LoanUi> = persistentListOf()
 ) : MvvmState
 

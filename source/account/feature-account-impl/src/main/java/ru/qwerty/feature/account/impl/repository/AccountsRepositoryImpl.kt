@@ -9,6 +9,7 @@ import ru.qwerty.feature.account.impl.mapper.toDomain
 import ru.qwerty.feature.account.impl.services.AccountsService
 import ru.qwerty.feature.account.impl.services.CreateAccount
 import ru.qwerty.feature.account.impl.services.api.MoneyAmountApi
+import ru.qwerty.feature.account.impl.services.api.TransferToAccount
 import ru.qwerty.feature.account.impl.services.api.transaction.TransactionApi
 import ru.qwerty.feature.account.impl.services.api.transaction.TransactionRequest
 import javax.inject.Inject
@@ -33,7 +34,12 @@ internal class AccountsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createAccount(title: String, amountType: String) {
-        accountsService.createAccount(createAccount = CreateAccount(title = title, code = amountType))
+        accountsService.createAccount(
+            createAccount = CreateAccount(
+                title = title,
+                code = amountType
+            )
+        )
         Log.d("AccountsService", "creation success")
     }
 
@@ -76,7 +82,11 @@ internal class AccountsRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun createTransaction(withdrawAmount: String, key: String, code: String): TransactionApi {
+    private fun createTransaction(
+        withdrawAmount: String,
+        key: String,
+        code: String
+    ): TransactionApi {
         val transaction = TransactionApi(
             key = key,
             moneyAmountApis = MoneyAmountApi(code = code, value = withdrawAmount.toDouble()),
@@ -86,5 +96,24 @@ internal class AccountsRepositoryImpl @Inject constructor(
 
     override suspend fun deleteAccount(id: String) {
         return accountsService.deleteAccount(id = id.toInt())
+    }
+
+    override suspend fun transferToAccount(
+        fromAccountId: String,
+        toAccountId: String,
+        amount: String,
+        key: String,
+        code: String
+    ) {
+        val transaction = TransactionApi(
+            key = key,
+            moneyAmountApis = MoneyAmountApi(code = code, value = amount.toDouble()),
+        )
+        val transferRequest = TransferToAccount(
+            fromAccountId = fromAccountId.toInt(),
+            toAccountId = toAccountId.toInt(),
+            transaction = transaction,
+        )
+        accountsService.transferToAccount(transferRequest)
     }
 }

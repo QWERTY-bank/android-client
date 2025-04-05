@@ -51,9 +51,9 @@ private fun LoanListScreenInternal(
             onLoanTap = onLoanTap,
             onGetLoanTap = onGetLoanClick,
         )
-        state.loanList.isEmpty() -> LoansListEmptyScreen(onGetLoanTap = onGetLoanClick)
         state.isError -> LoansListErrorScreen(modifier = modifier, onRetryClick = onRetryButton)
         state.isLoading -> LoansListLoadingScreen(modifier = modifier)
+        state.loanList.isEmpty() -> LoansListEmptyScreen(onGetLoanTap = onGetLoanClick, state = state)
 
     }
 }

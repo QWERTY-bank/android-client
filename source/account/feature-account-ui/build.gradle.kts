@@ -42,6 +42,7 @@ android {
 dependencies {
     api(project(":common-mvvm"))
     implementation(project(":source:account:feature-account-api"))
+    implementation(project(":feature-credits-api"))
     implementation(project(":common-coroutines"))
     implementation(project(":feature-account-auth-api"))
     implementation(project(":common-uikit"))

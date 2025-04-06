@@ -17,6 +17,7 @@ data class AccountNavigation(
     val red: Float,
     val green: Float,
     val blue: Float,
+    val isHidden: Boolean,
 )
 
 @Serializable

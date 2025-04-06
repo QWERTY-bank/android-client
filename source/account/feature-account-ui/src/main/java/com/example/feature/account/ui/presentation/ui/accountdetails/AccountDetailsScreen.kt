@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -39,6 +40,7 @@ import ru.qwerty.common_uikit.component.DepositTransactionCard
 import ru.qwerty.common_uikit.component.LatoFont
 import ru.qwerty.common_uikit.component.WithdrawTransactionCard
 import ru.qwerty.common_uikit.component.button.AccentButtonChip
+import ru.qwerty.common_uikit.component.button.HiddenAccountButton
 import ru.qwerty.common_uikit.component.theme.Colors
 
 /**
@@ -49,6 +51,7 @@ internal fun AccountDetailsScreen(
     id: Int,
     isClosed: Boolean,
     title: String,
+    isHidden: Boolean,
     accountCurrencyType: String,
     color: Color,
     viewModel: AccountDetailsViewModel,
@@ -86,6 +89,8 @@ internal fun AccountDetailsScreen(
         accountCurrencyType = accountCurrencyType,
         onAccountNumberTap = onAccountNumberTap,
         onBetweenAccountsTap = onBetweenAccountsTap,
+        isHidden = isHidden,
+        onHiddenClicked = { viewModel.setHiddenAccount(isHidden = it, accountId = id) }
     )
 }
 
@@ -98,12 +103,14 @@ private fun AccountDetailsScreenInternal(
     title: String,
     color: Color,
     isClosed: Boolean,
+    isHidden: Boolean,
     modifier: Modifier = Modifier,
     onClickOnWithdraw: (String, String, String) -> Unit,
     onClickOnDeposit: (String, String) -> Unit,
     onCloseAccountTap: (String) -> Unit,
     onBetweenAccountsTap: (String, String, String) -> Unit,
     onAccountNumberTap: (String, String, String) -> Unit,
+    onHiddenClicked: (Boolean) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -131,6 +138,8 @@ private fun AccountDetailsScreenInternal(
                 accountCurrencyType = accountCurrencyType,
                 onBetweenAccountsTap = onBetweenAccountsTap,
                 onAccountNumberTap = onAccountNumberTap,
+                onHiddenClicked = onHiddenClicked,
+                isHidden = isHidden,
             )
         }
         when {
@@ -166,6 +175,7 @@ private fun AccountDetailsActions(
     accountId: String,
     isClosed: Boolean,
     moneyAmount: String,
+    isHidden: Boolean,
     accountCurrencyType: String,
     modifier: Modifier = Modifier,
     onDepositTap: (String, String) -> Unit = { _, _ -> },
@@ -173,6 +183,7 @@ private fun AccountDetailsActions(
     onCloseAccountTap: (String) -> Unit = {},
     onBetweenAccountsTap: (String, String, String) -> Unit,
     onAccountNumberTap: (String, String, String) -> Unit,
+    onHiddenClicked: (Boolean) -> Unit = {},
 ) {
     if (isClosed) {
         Text(
@@ -208,6 +219,12 @@ private fun AccountDetailsActions(
                     onClick = { onCloseAccountTap(accountId) },
                     containerColor = Colors.PeppyPeacock,
                 )
+                HiddenAccountButton(
+                    icon = painterResource(R.drawable.eye_closed),
+                    hiddenIcon = painterResource(R.drawable.eye_open),
+                    isHidden = isHidden,
+                    onClick = onHiddenClicked,
+                )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -238,3 +255,16 @@ private fun AccountDetailsActions(
 }
 
 
+@Preview
+@Composable
+private fun AccountDetailsActionsPreview() {
+    AccountDetailsActions(
+        accountId = "1",
+        isClosed = false,
+        moneyAmount = "50000",
+        accountCurrencyType = "Usd",
+        onBetweenAccountsTap = { _, _, _ -> },
+        onAccountNumberTap = { _, _, _ -> },
+        isHidden = false,
+    )
+}

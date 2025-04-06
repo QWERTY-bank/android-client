@@ -45,7 +45,7 @@ internal fun AccountListContentScreen(
     state: AccountListState,
     modifier: Modifier = Modifier,
     onCreateAccountTap: (String, String) -> Unit,
-    onNavigateToAccountDetails: (Int, String, Boolean, String, Color, String) -> Unit,
+    onNavigateToAccountDetails: (Int, String, Boolean, String, Color, String, Boolean) -> Unit,
     onTakeMoneyButtonTap: () -> Unit,
 ) {
     val showBottomSheet = remember { mutableStateOf(false) }
@@ -114,7 +114,7 @@ private fun SectionTitle(modifier: Modifier = Modifier, text: String, color: Col
 
 private fun LazyListScope.DisplayAccounts(
     accounts: List<AccountUi>,
-    onNavigateToAccountDetails: (Int, String, Boolean, String, Color, String) -> Unit
+    onNavigateToAccountDetails: (Int, String, Boolean, String, Color, String, Boolean) -> Unit
 ) {
     itemsIndexed(accounts) { index, account ->
         val baseColor = if (index % 2 == 0) SunshineSurprise else BlueDepression
@@ -127,8 +127,10 @@ private fun LazyListScope.DisplayAccounts(
                     account.moneyAmount,
                     baseColor,
                     account.accountCurrencyType,
+                    account.isHidden,
                 )
             },
+            isHidden = account.isHidden,
             balance = account.moneyAmount,
             cardTitle = account.title,
             baseColor = baseColor,
@@ -140,7 +142,7 @@ private fun LazyListScope.DisplayAccounts(
 
 private fun LazyListScope.DisplayClosedAccounts(
     accounts: List<AccountUi>,
-    onNavigateToAccountDetails: (Int, String, Boolean, String, Color, String) -> Unit
+    onNavigateToAccountDetails: (Int, String, Boolean, String, Color, String, Boolean) -> Unit
 ) {
     itemsIndexed(accounts.filter { it.isClosed }) { index, account ->
         val baseColor = if (index % 2 == 0) SunshineSurprise else BlueDepression
@@ -153,11 +155,13 @@ private fun LazyListScope.DisplayClosedAccounts(
                     account.moneyAmount,
                     baseColor,
                     account.accountCurrencyType,
+                    account.isHidden,
                 )
             },
             balance = account.moneyAmount,
             cardTitle = account.title,
             baseColor = baseColor,
+            isHidden = account.isHidden,
             accountCurrencyType = account.accountCurrencyType,
             cardNumber = account.id,
         )

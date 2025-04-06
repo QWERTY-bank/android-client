@@ -44,6 +44,7 @@ fun NavController.navigateToAccountDetails(
     moneyAmount: String,
     color: Color,
     accountCurrencyType: String,
+    isHidden: Boolean,
 ) {
     navigate(
         AccountNavigation(
@@ -55,6 +56,7 @@ fun NavController.navigateToAccountDetails(
             green = color.green,
             blue = color.blue,
             accountCurrencyType = accountCurrencyType,
+            isHidden = isHidden,
         )
     )
 }
@@ -67,7 +69,7 @@ fun NavController.navigateBackToAccountList(graphId: Int) {
 
 fun NavGraphBuilder.buildAccountListsGraph(
     navigateToWithdraw: (String, String, String) -> Unit,
-    onNavigateToDetails: (Int, String, Boolean, String, Color, String) -> Unit,
+    onNavigateToDetails: (Int, String, Boolean, String, Color, String, Boolean) -> Unit,
     onNavigateToDeposit: (String, String) -> Unit,
     onNavigateBackToAccountList: () -> Unit,
     onNavigateBackToDetails: () -> Unit,
@@ -83,13 +85,13 @@ fun NavGraphBuilder.buildAccountListsGraph(
         )
     }
     composable<AccountNavigation> { backStackEntry ->
-        val account: AccountNavigation = backStackEntry.toRoute()
-        val color = Color(account.red, account.green, account.blue)
+        val direction: AccountNavigation = backStackEntry.toRoute()
+        val color = Color(direction.red, direction.green, direction.blue)
         AccountDetailsScreen(
-            id = account.id,
-            isClosed = account.isClosed,
-            title = account.title,
-            accountCurrencyType = account.accountCurrencyType,
+            id = direction.id,
+            isClosed = direction.isClosed,
+            title = direction.title,
+            accountCurrencyType = direction.accountCurrencyType,
             color = color,
             viewModel = hiltViewModel(),
             onClickOnWithdraw = navigateToWithdraw,
@@ -97,6 +99,7 @@ fun NavGraphBuilder.buildAccountListsGraph(
             onNavigateBackToAccountList = onNavigateBackToAccountList,
             onBetweenAccountsTap = onBetweenAccountsTap,
             onAccountNumberTap = onAccountNumberTap,
+            isHidden = direction.isHidden,
         )
     }
     composable<WithdrawNavigation> { backStackEntry ->

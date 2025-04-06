@@ -41,9 +41,11 @@ fun NavController.navigateToLogin() {
 fun NavGraphBuilder.buildAccountGraph(
     onNavigateToAccountList: () -> Unit,
     onNavigateToLogin: () -> Unit,
+    code: String? = null,
 ) {
     composable(route = AccountRoutes.Account.route) {
         UserLoginScreen(
+            code = code,
             viewModel = hiltViewModel(),
             navigateOnAccountList = onNavigateToAccountList,
         )

@@ -7,18 +7,22 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.qwerty.common_uikit.component.LatoFont
-import ru.qwerty.common_uikit.component.theme.Colors
 import ru.qwerty.common_uikit.component.theme.Colors.BlueDepression
 import ru.qwerty.common_uikit.component.theme.TextStyle
 
@@ -75,6 +79,39 @@ fun AccentButtonChip(
             letterSpacing = 1.sp,
             color = Color.White
         )
+    }
+}
+
+
+@Composable
+fun HiddenAccountButton(
+    icon: Painter,
+    hiddenIcon: Painter,
+    modifier: Modifier = Modifier,
+    onClick: (Boolean) -> Unit = {},
+    isHidden: Boolean = true,
+) {
+    val isHiddenState = remember { mutableStateOf(isHidden) }
+    IconButton(
+        onClick = {
+            onClick(isHiddenState.value)
+            isHiddenState.value = !isHiddenState.value
+        },
+        modifier = modifier,
+    ) {
+        if (isHiddenState.value) {
+            Icon(
+                painter = icon,
+                tint = BlueDepression,
+                contentDescription = "",
+            )
+        } else {
+            Icon(
+                painter = hiddenIcon,
+                tint = BlueDepression,
+                contentDescription = "",
+            )
+        }
     }
 }
 

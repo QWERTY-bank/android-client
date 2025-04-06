@@ -41,6 +41,8 @@ dependencies {
     implementation(project(":feature-account-auth-api"))
     implementation project(':common-uikit')
 
+    implementation(libs.androidx.browser)
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -62,6 +64,9 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(libs.lottie)
+    implementation("com.airbnb.android:lottie-compose:6.6.4")
 
     ksp(libs.daggerHiltCompiler)
 }

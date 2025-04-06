@@ -16,6 +16,7 @@ data class AccountUi(
     val title: String,
     val userId: String,
     val accountCurrencyType: String,
+    val isHidden: Boolean = false,
 )
 
 @Immutable
@@ -33,7 +34,7 @@ data class TransactionUi(
     val code: String?,
 )
 
-internal fun Account.toUi(): AccountUi {
+internal fun Account.toUi(hiddenAccount: List<Int>): AccountUi {
     return AccountUi(
         id = this.id,
         moneyAmount = this.moneyAmount.value.toString(),
@@ -41,6 +42,7 @@ internal fun Account.toUi(): AccountUi {
         title = this.title,
         userId = this.userId,
         accountCurrencyType = moneyAmount.code ?: "Rub",
+        isHidden = hiddenAccount.contains(this.id),
     )
 }
 

@@ -15,10 +15,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.qwerty.coroutines.runCatchingNonCancellation
-import ru.qwerty.feature_account_auth_api.accounts.LoginUserByPhoneUseCase
+import ru.qwerty.feature_account_auth_api.accounts.LoginUserUseCase
 import ru.qwerty.ui.domain.ValidatePasswordInputUseCase
 import ru.qwerty.ui.domain.ValidatePhoneInputUseCase
-import ru.qwerty.ui.domain.ValidationResult
 import javax.inject.Inject
 
 /**
@@ -27,9 +26,7 @@ import javax.inject.Inject
 @Stable
 @HiltViewModel
 internal class AccountViewModel @Inject constructor(
-    private val loginUserByPhoneUseCase: LoginUserByPhoneUseCase,
-    private val validatePhoneInputUseCase: ValidatePhoneInputUseCase,
-    private val validatePasswordInputUseCase: ValidatePasswordInputUseCase,
+    private val loginUserUseCase: LoginUserUseCase
 ) : MvvmViewModel<AccountState>(AccountState()) {
 
     val state: StateFlow<AccountState>
@@ -38,49 +35,18 @@ internal class AccountViewModel @Inject constructor(
     private val _news = MutableSharedFlow<AccountNews>(replay = 1)
     val news = _news.asSharedFlow()
 
-    fun loginUserByPhone() {
+
+    fun loginUserByCode(code: String) {
         viewModelScope.launch {
             internalState.setLoadingState()
             runCatchingNonCancellation {
-                with(internalState.value) {
-                    if (accountUiState.isValidationPassed()) {
-                        loginUserByPhoneUseCase(
-                            phoneNumber = accountUiState.phone,
-                            password = accountUiState.password,
-                        )
-                    } else {
-                        _news.tryEmit(AccountNews.AccountNewsSnackbar)
-                        internalState.setLoadingState(isLoading = false)
-                    }
-                }
+                loginUserUseCase.invoke(code)
             }.onSuccess {
                 _news.tryEmit(AccountNews.NavigateToAccountListScreenNews)
             }.onFailure { error ->
                 Log.d("AccountViewModel", "error", error)
                 internalState.setErrorState()
             }
-        }
-    }
-
-    fun onPhoneInput(phoneInput: String) {
-        internalState.update { state ->
-            state.copy(
-                accountUiState = state.accountUiState.copy(
-                    phone = phoneInput,
-                    isPhoneValid = validatePhoneInputUseCase(phoneInput = phoneInput)
-                )
-            )
-        }
-    }
-
-    fun onPasswordInput(passwordInput: String) {
-        internalState.update { state ->
-            state.copy(
-                accountUiState = state.accountUiState.copy(
-                    password = passwordInput,
-                    isPasswordValid = validatePasswordInputUseCase(passwordInput = passwordInput)
-                )
-            )
         }
     }
 
@@ -108,14 +74,12 @@ internal class AccountViewModel @Inject constructor(
 }
 
 internal sealed interface AccountNews {
-    data object AccountNewsSnackbar : AccountNews
     data object NavigateToAccountListScreenNews : AccountNews
 }
 
 @Immutable
 internal data class AccountState(
     val accountRemoteState: AccountRemoteState = AccountRemoteState(),
-    val accountUiState: AccountUiState = AccountUiState(),
 ) : MvvmState
 
 @Immutable
@@ -123,18 +87,3 @@ internal data class AccountRemoteState(
     val isLoading: Boolean = false,
     val error: Boolean = false,
 )
-
-@Stable
-internal data class AccountUiState(
-    val phone: String = "",
-    val password: String = "",
-    val isPhoneValid: ValidationResult = ValidationResult(isValid = false),
-    val isPasswordValid: ValidationResult = ValidationResult(isValid = false),
-)
-
-private fun AccountUiState.isValidationPassed(): Boolean {
-    return when {
-        isPhoneValid.isValid == true && isPasswordValid.isValid == true -> true
-        else -> false
-    }
-}

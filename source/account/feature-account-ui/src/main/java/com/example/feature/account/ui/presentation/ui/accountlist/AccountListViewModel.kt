@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.common_mvvm.MvvmState
 import com.example.common_mvvm.MvvmViewModel
 import com.example.feature.account.ui.domain.usecases.SendResultAfterCloseAccountFacade
-import com.example.feature.account.ui.domain.usecases.SendResultAfterTransactionFacade
 import com.example.feature.account.ui.domain.usecases.SendResultForAccountListFacade
 import com.example.feature.account.ui.presentation.ui.model.AccountUi
 import com.example.feature.account.ui.presentation.ui.model.toUi
@@ -16,19 +15,16 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.qwerty.coroutines.runCatchingNonCancellation
 import ru.qwerty.feature.account.api.CreateAccountUseCase
 import ru.qwerty.feature.account.api.GetUserAccountUseCase
+import ru.qwerty.feature_account_auth_api.repository.UserRepository
 import javax.inject.Inject
 
 /**
@@ -41,6 +37,7 @@ internal class AccountListViewModel @Inject constructor(
     private val createAccountUseCase: CreateAccountUseCase,
     private val sendResultAfterCloseAccountFacade: SendResultAfterCloseAccountFacade,
     private val sendResultForAccountListFacade: SendResultForAccountListFacade,
+    private val userRepository: UserRepository,
 ) : MvvmViewModel<AccountListState>(AccountListState()) {
 
     val state: StateFlow<AccountListState>
@@ -73,9 +70,10 @@ internal class AccountListViewModel @Inject constructor(
             runCatchingNonCancellation {
                 internalState.setLoadingState()
                 val accounts = getUserAccountUseCase()
+                val hiddenAccount = userRepository.getHiddenAccounts()
                 internalState.update { state ->
                     state.copy(
-                        accounts = accounts.map { it.toUi() }.toImmutableList(),
+                        accounts = accounts.map { it.toUi(hiddenAccount) }.toImmutableList(),
                         isLoading = false,
                     )
                 }
@@ -103,7 +101,8 @@ internal class AccountListViewModel @Inject constructor(
                 }
             }.onSuccess {
                 loadAccounts()
-            }.onFailure {
+            }.onFailure { error ->
+                Log.d("AccountListView", error.message.toString())
                 internalState.update { state ->
                     state.copy(isError = true)
                 }

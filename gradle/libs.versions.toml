@@ -1,11 +1,13 @@
 [versions]
 activityCompose = "1.10.0"
+browser = "1.8.0"
 converterGson = "2.9.0"
 agp = "8.8.0"
 appcompat = "1.7.0"
 composeBom = "2025.02.00"
 coreKtx = "1.15.0"
 kotlinxCoroutinesCore = "1.10.1"
+lottie = "5.2.0"
 signalR = "7.0.2"
 signalRCoroutines = "0.9.4"
 dagger2 = "2.55"
@@ -32,6 +34,7 @@ securityCrypto = "1.1.0-alpha06"
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -50,6 +53,7 @@ daggerCompiler = { module = "com.google.dagger:dagger-compiler", version.ref = "
 daggerHilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger2" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 coroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 securityCrypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
 daggerHiltNavigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "daggerHiltNavigation" }
 daggerHiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger2" }

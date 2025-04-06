@@ -21,12 +21,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import ru.qwerty.coroutines.runCatchingNonCancellation
 import ru.qwerty.feature.account.api.DeleteAccountUseCase
 import ru.qwerty.feature.account.api.GetAccountBalanceUseCase
 import ru.qwerty.feature.account.api.GetTransactionsByAccountIdUseCase
 import ru.qwerty.feature.account.api.ObtainTransactionsUseCase
+import ru.qwerty.feature_account_auth_api.repository.UserRepository
 import javax.inject.Inject
 
 /**
@@ -41,6 +41,7 @@ internal class AccountDetailsViewModel @Inject constructor(
     private val sendResultAfterCloseAccountFacade: SendResultAfterCloseAccountFacade,
     private val deleteAccountUseCase: DeleteAccountUseCase,
     private val getAccountBalanceUseCase: GetAccountBalanceUseCase,
+    private val userRepository: UserRepository,
 ) : MvvmViewModel<AccountDetailsState>(AccountDetailsState()) {
 
     val state: StateFlow<AccountDetailsState>
@@ -116,6 +117,18 @@ internal class AccountDetailsViewModel @Inject constructor(
                 news.emit(AccountDetailsNews.NavigateToAccountListAndRefresh)
             }.onFailure {
                 internalState.update { it.copy(error = true) }
+            }
+        }
+    }
+
+    fun setHiddenAccount(isHidden: Boolean, accountId: Int) {
+        viewModelScope.launch {
+            runCatchingNonCancellation {
+                userRepository.setHiddenAccount(isHidden, accountId)
+            }.onSuccess {
+                Log.d("AccountDetailsViewModel", "hidden success set")
+            }.onFailure { error ->
+                Log.d("AccountDetailsViewModel", error.message.toString())
             }
         }
     }

@@ -6,8 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ru.qwerty.common_network.common.CacheManager
 import ru.qwerty.common_network.interceptors.AccountService
-import ru.qwerty.feature_account_auth_api.repository.AccountRepository
-import ru.qwerty.feature_account_auth_impl.data.repository.AccountRepositoryImpl
+import ru.qwerty.feature_account_auth_api.repository.UserRepository
+import ru.qwerty.feature_account_auth_impl.data.repository.UserRepositoryImpl
 
 /**
  * @author y.yangel
@@ -20,7 +20,7 @@ class FeatureAccountAuthImplModule {
     internal fun provideRepository(
         accountService: AccountService,
         cacheManager: CacheManager,
-    ): AccountRepository {
-        return AccountRepositoryImpl(accountService = accountService, cacheManager = cacheManager)
+    ): UserRepository {
+        return UserRepositoryImpl(accountService = accountService, cacheManager = cacheManager)
     }
 }

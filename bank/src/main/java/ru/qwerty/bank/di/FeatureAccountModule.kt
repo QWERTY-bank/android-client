@@ -16,7 +16,6 @@ import ru.qwerty.feature.account.api.GetTransactionsByAccountIdUseCase
 import ru.qwerty.feature.account.api.GetTransactionsByAccountIdUseCaseProvider
 import ru.qwerty.feature.account.api.GetUserAccountUseCase
 import ru.qwerty.feature.account.api.GetUserAccountUseCaseImpl
-import ru.qwerty.feature.account.api.GetUserAccountUseCaseProvider
 import ru.qwerty.feature.account.api.ObtainTransactionsUseCase
 import ru.qwerty.feature_account_auth_api.IsUserAlreadyLoginUseCase
 import ru.qwerty.feature_account_auth_api.IsUserAlreadyLoginUseCaseProvider
@@ -24,7 +23,7 @@ import ru.qwerty.feature.account.api.WithdrawUseCase
 import ru.qwerty.feature.account.api.WithdrawUseCaseProvider
 import ru.qwerty.feature.account.api.repository.AccountsRepository
 import ru.qwerty.feature.account.api.repository.TransactionRepository
-import ru.qwerty.feature_account_auth_api.repository.AccountRepository
+import ru.qwerty.feature_account_auth_api.repository.UserRepository
 
 /**
  * @author y.yangel
@@ -64,8 +63,8 @@ object FeatureAccountModule {
     }
 
     @Provides
-    fun provideIsUserAlreadyLoginUseCase(accountRepository: AccountRepository): IsUserAlreadyLoginUseCase {
-        return IsUserAlreadyLoginUseCaseProvider(accountRepository).useCase
+    fun provideIsUserAlreadyLoginUseCase(userRepository: UserRepository): IsUserAlreadyLoginUseCase {
+        return IsUserAlreadyLoginUseCaseProvider(userRepository).useCase
     }
 
     @Provides

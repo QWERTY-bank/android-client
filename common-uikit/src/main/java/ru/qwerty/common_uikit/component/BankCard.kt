@@ -13,13 +13,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -56,6 +60,7 @@ fun BankCardUi(
     cardTitle: String,
     accountCurrencyType: String,
     modifier: Modifier = Modifier,
+    isHidden: Boolean = false,
     baseColor: Color = BlueDepression,
     cardNumber: Int,
     brand: String = "VISA"
@@ -69,7 +74,7 @@ fun BankCardUi(
     ) {
         Box {
             BankCardBackground(baseColor = baseColor)
-            BankCardTitle(cardNumber = cardTitle)
+            BankCardTitle(cardNumber = cardTitle, isHidden = isHidden)
             SpaceWrapper(
                 modifier = Modifier.align(Alignment.TopStart),
                 space = 32.dp,
@@ -79,6 +84,7 @@ fun BankCardUi(
                 BankCardLabelAndText(
                     label = "Номер счета",
                     text = cardNumber.toString(),
+                    isHidden = isHidden,
                 )
             }
             SpaceWrapper(
@@ -91,6 +97,7 @@ fun BankCardUi(
                     BankCardLabelAndText(
                         label = stringResource(R.string.available_balance),
                         text = "${accountCurrencyType.toCurrency()} $balance",
+                        isHidden = isHidden,
                     )
                 }
             }
@@ -149,9 +156,10 @@ private fun String.toCurrency(): String {
 }
 
 @Composable
-private fun BankCardTitle(cardNumber: String) {
+private fun BankCardTitle(cardNumber: String, isHidden: Boolean) {
     Row(
         modifier = Modifier
+            .let { if (isHidden) it.blur(16.dp) else it }
             .fillMaxSize()
             .padding(horizontal = 32.dp),
         horizontalArrangement = Arrangement.SpaceBetween, // Space out the children evenly
@@ -170,8 +178,9 @@ private fun BankCardTitle(cardNumber: String) {
     }
 }
 
+
 @Composable
-private fun BankCardLabelAndText(label: String, text: String) {
+private fun BankCardLabelAndText(label: String, text: String, isHidden: Boolean) {
     Column(
         modifier = Modifier
             .wrapContentSize(),
@@ -188,16 +197,18 @@ private fun BankCardLabelAndText(label: String, text: String) {
             )
         )
         Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = text,
-            style = TextStyle(
-                fontFamily = LatoFont,
-                fontWeight = FontWeight.W400,
-                fontSize = 16.sp,
-                letterSpacing = 1.sp,
-                color = Color.White
+        Row(modifier = Modifier.fillMaxWidth().let { if (isHidden) it.blur(16.dp) else it }) {
+            Text(
+                text = text,
+                style = TextStyle(
+                    fontFamily = LatoFont,
+                    fontWeight = FontWeight.W400,
+                    fontSize = 16.sp,
+                    letterSpacing = 1.sp,
+                    color = Color.White
+                )
             )
-        )
+        }
     }
 }
 

@@ -48,6 +48,7 @@ internal class SelfTransferActionViewModel @Inject constructor(
     fun depositOnAccount() = with(internalState.value) {
         viewModelScope.launch {
             runCatchingNonCancellation {
+                internalState.update { it.copy(isLoading = true) }
                 if (moneyAmount.toDouble() <= moneyAmountOnAccount.toDouble()) {
                     Log.d("SelfTransferActionViewModel", moneyAmountOnAccount)
                     accountsRepository.transferToAccount(

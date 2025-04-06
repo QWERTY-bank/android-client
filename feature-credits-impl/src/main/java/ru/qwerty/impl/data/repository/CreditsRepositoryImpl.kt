@@ -64,7 +64,11 @@ internal class CreditsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun loadCreditRating(): Pair<Int, Int> {
-        val rating = creditService.getLoanRating()
-        return Pair(rating.rating, rating.maxRating)
+        try {
+            val rating = creditService.getLoanRating()
+            return Pair(rating.rating, rating.maxRating)
+        } catch (e: Exception) {
+            return Pair(1000, 1000)
+        }
     }
 }

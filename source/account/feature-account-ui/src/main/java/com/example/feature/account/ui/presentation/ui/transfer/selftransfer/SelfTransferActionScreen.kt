@@ -110,13 +110,14 @@ private fun SelfTransferContent(
 @Composable
 private fun DepositLoadingScreen() {
     Column(
-        modifier = Modifier.padding(top = 24.dp),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         CircularProgressIndicator(
             color = Colors.BlueDepression,
-            modifier = Modifier.size(64.dp)
+            modifier = Modifier.size(64.dp),
+            strokeWidth = 2.dp
         )
     }
 }

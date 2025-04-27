@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.qwerty.coroutines.runCatchingNonCancellation
 import ru.qwerty.feature_account_auth_api.accounts.LoginUserUseCase
+import ru.qwerty.feature_account_auth_api.repository.FirebaseRepository
 import ru.qwerty.ui.domain.ValidatePasswordInputUseCase
 import ru.qwerty.ui.domain.ValidatePhoneInputUseCase
 import javax.inject.Inject
@@ -26,7 +27,7 @@ import javax.inject.Inject
 @Stable
 @HiltViewModel
 internal class AccountViewModel @Inject constructor(
-    private val loginUserUseCase: LoginUserUseCase
+    private val loginUserUseCase: LoginUserUseCase,
 ) : MvvmViewModel<AccountState>(AccountState()) {
 
     val state: StateFlow<AccountState>

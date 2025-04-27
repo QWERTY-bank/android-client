@@ -15,9 +15,9 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
-        buildConfigField("String", "BASE_ACCOUNT_URL", "\"http://95.163.222.150:5003/\"")
-        buildConfigField("String", "BASE_CREDIT_URL", "\"http://95.163.222.150:5002/\"")
-        buildConfigField("String", "BASE_CORE_URL", "\"http://95.163.222.150:5001/\"")
+        buildConfigField("String", "BASE_ACCOUNT_URL", "\"http://83.166.245.197:5003/\"")
+        buildConfigField("String", "BASE_CREDIT_URL", "\"http://83.166.245.197:5002/\"")
+        buildConfigField("String", "BASE_CORE_URL", "\"http://83.166.245.197:5001/\"")
     }
 
     buildTypes {

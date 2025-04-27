@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import ru.qwerty.bank.data.FirebaseRepositoryImpl
 import ru.qwerty.feature.account.api.CreateAccountUseCase
 import ru.qwerty.feature.account.api.CreateAccountUseCaseProvider
 import ru.qwerty.feature.account.api.DeleteAccountUseCase
@@ -23,6 +24,7 @@ import ru.qwerty.feature.account.api.WithdrawUseCase
 import ru.qwerty.feature.account.api.WithdrawUseCaseProvider
 import ru.qwerty.feature.account.api.repository.AccountsRepository
 import ru.qwerty.feature.account.api.repository.TransactionRepository
+import ru.qwerty.feature_account_auth_api.repository.FirebaseRepository
 import ru.qwerty.feature_account_auth_api.repository.UserRepository
 
 /**
@@ -75,5 +77,10 @@ object FeatureAccountModule {
     @Provides
     fun provideObtainTransactionsUseCase(transactionRepository: TransactionRepository) : ObtainTransactionsUseCase {
         return ObtainTransactionsUseCase(transactionRepository)
+    }
+
+    @Provides
+    fun provideFirebaseRepository() : FirebaseRepository {
+        return FirebaseRepositoryImpl()
     }
 }

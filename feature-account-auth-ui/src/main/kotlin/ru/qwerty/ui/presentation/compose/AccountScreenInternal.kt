@@ -174,7 +174,7 @@ fun openLoginInCustomTab(context: Context) {
     val builder = CustomTabsIntent.Builder()
     val customTabsIntent = builder.build()
     val redirectUri = "mb-employee://auth/web"
-    val loginUrl = "http://95.163.222.150:5004/auth/login?redirectUrl=$redirectUri"
+    val loginUrl = "http://83.166.245.197:5004/auth/login?redirectUrl=$redirectUri"
     customTabsIntent.launchUrl(context, loginUrl.toUri())
 }
 

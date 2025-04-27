@@ -1,12 +1,12 @@
 package ru.qwerty.bank
 
+import android.Manifest
 import android.content.Intent
-import android.graphics.Color
-import android.net.Uri
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -18,7 +18,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -31,8 +32,10 @@ import com.example.feature.account.ui.presentation.ui.transfer.navigation.naviga
 import com.example.feature.account.ui.presentation.ui.transfer.navigation.navigateToSelfTransferScreen
 import com.example.feature.account.ui.presentation.ui.transfer.navigation.navigateToTransferActionScreen
 import com.example.feature.account.ui.presentation.ui.transfer.navigation.selfTransferGraph
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import dagger.hilt.android.AndroidEntryPoint
-import okio.ByteString.Companion.encodeUtf8
+import kotlinx.coroutines.tasks.await
 import ru.qwerty.bank.ui.theme.QwertybankTheme
 import ru.qwerty.feature.credits.ui.presentation.navigation.buildCreditsFeatureGraph
 import ru.qwerty.feature.credits.ui.presentation.navigation.navigateBackToLoansListScreen
@@ -45,21 +48,20 @@ import ru.qwerty.feature.credits.ui.presentation.navigation.navigateToLoansReduc
 import ru.qwerty.feature.credits.ui.presentation.navigation.navigateToTariffListScreen
 import ru.qwerty.ui.navigation.AccountRoutes
 import ru.qwerty.ui.navigation.buildAccountGraph
-import ru.qwerty.ui.navigation.navigateToAccountList
 import ru.qwerty.ui.navigation.navigateToLogin
-import java.net.URLDecoder
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestNotificationPermission()
         enableEdgeToEdge()
         WindowCompat.getInsetsController(window, window.decorView)
             .isAppearanceLightStatusBars = true
 
         val uri = intent?.data
-        val code = uri?.getQueryParameter("code")?.let { Uri.decode(it) }
+        val code = uri?.getQueryParameter("code")?.replace(" ", "+")
         Log.d("qwerty", "code = $code")
 
         setContent {
@@ -71,8 +73,23 @@ class MainActivity : ComponentActivity() {
                         codeState.value = it
                     }
                 }
-
                 ComposeNavGraph(code = codeState.value)
+            }
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val hasPermissions = ContextCompat.checkSelfPermission(
+                /* context = */ this,
+                /* permission = */ Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+            if (!hasPermissions) {
+                ActivityCompat.requestPermissions(
+                    /* activity = */ this,
+                    /* permissions = */ arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    /* requestCode = */ 0,
+                )
             }
         }
     }
@@ -162,14 +179,13 @@ internal fun ComposeNavGraph(modifier: Modifier = Modifier, code: String? = null
                         accountCurrencyType = accountCurrencyType,
                     )
                 },
-                onNavigateToDetails = {
-                        id,
-                        title,
-                        isClosed,
-                        moneyAmount,
-                        color,
-                        accountCurrencyType,
-                        isHidden ->
+                onNavigateToDetails = { id,
+                                        title,
+                                        isClosed,
+                                        moneyAmount,
+                                        color,
+                                        accountCurrencyType,
+                                        isHidden ->
                     navController.navigateToAccountDetails(
                         id = id,
                         title = title,

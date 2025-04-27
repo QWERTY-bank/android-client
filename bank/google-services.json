@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "822282336651",
+    "project_id": "qwerty-bank",
+    "storage_bucket": "qwerty-bank.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822282336651:android:a77e4a82897dced1fc978e",
+        "android_client_info": {
+          "package_name": "ru.qwerty.bank"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-hLmrSCmxKPuQb4OI9w8mwGJCENEw06w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

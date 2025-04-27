@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import ru.qwerty.coroutines.runCatchingNonCancellation
 import ru.qwerty.feature.account.api.CreateAccountUseCase
 import ru.qwerty.feature.account.api.GetUserAccountUseCase
+import ru.qwerty.feature_account_auth_api.repository.FirebaseRepository
 import ru.qwerty.feature_account_auth_api.repository.UserRepository
 import javax.inject.Inject
 
@@ -38,6 +39,7 @@ internal class AccountListViewModel @Inject constructor(
     private val sendResultAfterCloseAccountFacade: SendResultAfterCloseAccountFacade,
     private val sendResultForAccountListFacade: SendResultForAccountListFacade,
     private val userRepository: UserRepository,
+    private val firebaseRepository: FirebaseRepository,
 ) : MvvmViewModel<AccountListState>(AccountListState()) {
 
     val state: StateFlow<AccountListState>
@@ -47,6 +49,13 @@ internal class AccountListViewModel @Inject constructor(
         loadAccounts()
         obtainResult()
         obtainTransaction()
+        obtainFirebaseResult()
+    }
+
+    private fun obtainFirebaseResult() {
+        viewModelScope.launch(Dispatchers.Default) {
+            firebaseRepository.obtainFirebaseToken()
+        }
     }
 
     private fun obtainResult() {
